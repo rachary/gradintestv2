@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "vueIndentScriptAndStyle": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "bracketSpacing": true,
+  "tabWidth": 2,
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^@/", "^../", "^./"],
+  "importOrderSortSpecifiers": true
+}

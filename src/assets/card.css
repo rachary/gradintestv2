@@ -1,0 +1,4 @@
+.card {
+  @apply rounded-lg shadow-md;
+  @apply bg-secondary-1;
+}

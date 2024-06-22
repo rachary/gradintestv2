@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
+body {
+}
+p {
+  @apply font-lato;
+}
+input {
+  @apply outline-none;
+}
+
+::-webkit-scrollbar {
+  width: 0.3rem;
+}
+::-webkit-scrollbar-track {
+  border-radius: 0.3rem;
+  background-color: #e7e7e7;
+  border: 1px solid #cacaca;
+  box-shadow: insert 0 0 0.45rem rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-500;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-600;
+}
