@@ -1,11 +1,11 @@
 interface Message {
-  user_id: number;
+  user_id: string;
   message: string;
   created_at: string;
   read_at: string | null;
 }
 
 interface Conversation {
-  user_ids: number[];
+  user_ids: string[];
   messages: message[];
 }

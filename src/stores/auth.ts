@@ -1,66 +1,39 @@
-import { faker } from "@faker-js/faker";
 import { defineStore } from "pinia";
-import { v4 as uuidv4 } from 'uuid';
+import { useUserStore } from "./user";
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isLoggedIn: false,
-    user: null as User | null,
-    users: [] as User[],
-    auth: [] as User[]
   }),
-  actions: {
-    loadAuth() {
-      const dataAuth = localStorage.getItem('auth')
-      if (dataAuth) {
-        const auth = JSON.parse(dataAuth)
-        this.auth = auth.user
+  getters: {
+    getAuthData() {
+      const storedAuth = localStorage.getItem('authentication')
+      let authData = null
+      if (storedAuth) {
+        authData = JSON.parse(storedAuth)
       }
-    },
-    login(email: string) {
-      const storedData = localStorage.getItem('users')
-      if (storedData){
-        const userData = JSON.parse(storedData)
-        const user = userData.find(u => u.email === email)
-        if (user) {
-            this.user = {
-              id: user.id,
-              email: user.email,
-              avatar: user.avatar
-            }
-          const storeUser = userData.filter(e => e.email !== user.email)
-          localStorage.setItem('users', JSON.stringify(storeUser))
-          } else {
-            this.createNewUser(email)
-          }
-        } else {
-          this.createNewUser(email)
+      return authData
+    }
+  },
+  actions: {
+    login(userEmail: string) {
+      const userStore = useUserStore()
+      const user = userStore.getUserByEmail(userEmail)
+      if (user) {
+        userStore.currentUser = {
+          id: user.id,
+          email: user.email,
+          avatar: user.avatar
+        }
+      } else {
+        userStore.currentUser = userStore.addUser(userEmail)
       }
       this.isLoggedIn = true
-      localStorage.setItem('auth', JSON.stringify({ isLoggedIn: this.isLoggedIn, user: this.user}))
-    },
-    createNewUser(email: string) {
-      const newUser: Users = {
-        id: uuidv4(),
-        email: email,
-        avatar: faker.image.avatar()
-      }
-      this.user = newUser
+      localStorage.setItem('authentication', JSON.stringify({ userAuth: this.isLoggedIn, currentUser: userStore.currentUser }))
     },
     logout() {
-      const storedAuth = localStorage.getItem('auth')
-      const storedUsers = localStorage.getItem('users')
-      if (storedUsers) {
-        this.users = JSON.parse(storedUsers)
-        if (storedAuth) {
-          const auth = JSON.parse(storedAuth)
-          const user = auth.user
-          this.users.push(user)
-        }
-      }
       this.isLoggedIn = false
-      localStorage.setItem('users', JSON.stringify(this.users))
-      localStorage.setItem('auth', JSON.stringify({ isLoggedIn: this.isLoggedIn, user: null}))
-    }
+      localStorage.setItem('authentication', JSON.stringify({ userAuth: this.isLoggedIn, currentUser: null }))
+    },
   }
 })

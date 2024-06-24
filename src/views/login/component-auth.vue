@@ -10,7 +10,7 @@ const account = reactive({
   password: ''
 })
 const authStore = useAuthStore()
-const isVisible = ref(true)
+const passwordVisible = ref(true)
 const submit = () => {
   authStore.login(account.username)
   router.push({ name: 'home'})
@@ -39,11 +39,11 @@ const submit = () => {
         id="password" 
         v-model="account.password" 
         class="border-b text-secondary-1 border-secondary-1 bg-primary-1 text-base w-full py-1 active:outline" 
-        :type="isVisible ? 'password' : 'text'" 
+        :type="passwordVisible ? 'password' : 'text'" 
         required>
       </div>
-      <div class="cursor-pointer" @click="isVisible = !isVisible">
-        <icon v-if="isVisible" icon="mdi:eye-off-outline" class="text-2xl ml-2 text-secondary-1" ></icon>
+      <div class="cursor-pointer" @click="passwordVisible = !passwordVisible">
+        <icon v-if="passwordVisible" icon="mdi:eye-off-outline" class="text-2xl ml-2 text-secondary-1" ></icon>
         <icon v-else icon="mdi:eye-outline" class="text-2xl ml-2 text-secondary-1" ></icon>
       </div>
     </div>

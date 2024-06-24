@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { formatName } from '@/formatters/name'
+import { useMessageStore } from '@/stores/message';
+import { useUserStore } from '@/stores/user';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -11,13 +13,14 @@ const filteredUsers = computed<User[]>(() => {
     user.email.toLowerCase().includes(route.query.search ? String(route.query.search).toLowerCase() : '')
   )
 })
-
-
+const userStore = useUserStore()
+const currentUser = userStore.currentUser
+const messageStore = useMessageStore()
 </script>
 
 <template>
     <div v-for="user in filteredUsers" :key="user.id" class="w-full">
-      <router-link :to="{ name: 'chat', params: { id: user.id}}" class="flex items-center hover:bg-gray-200">
+      <router-link :to="{ name: 'chat', params: { id: user.id}}" class="flex items-center hover:bg-gray-200" @click="messageStore.markMessagesAsRead(user.id, currentUser?.id || '')">
         <div class="min-w-8 xl:min-w-[4.5rem] ml-2 xl:ml-4 mr-2">
           <img :src="user.avatar" alt="" class="rounded-full w-12 xl:w-14">
         </div>

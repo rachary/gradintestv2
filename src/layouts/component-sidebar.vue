@@ -6,14 +6,12 @@ import ViewSetting from '@/views/dashboard/user/view-setting.vue'
 import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 
 const authStore = useAuthStore()
-authStore.loadAuth()
 const router = useRouter()
-
-const profile = ref(authStore.auth)
-
+const { getAuthData } = storeToRefs(authStore)
 const logout = () => {
   authStore.logout()
   router.push({ name: 'login'})
@@ -73,7 +71,7 @@ const handleTouch = (state: ToggleKeySidebar) => {
         </div>
         <div class="flex items-center">
           <button class="relative rounded-full p-1" :class="{ 'active': toggleState.profile }" @mouseover="handleMouse('profile')" @mouseleave="hoverState.profile = false" @touchstart="handleTouch('profile')" @click="toggle('profile')" >
-            <img :src="profile.avatar" alt="" class="w-8 h-8 rounded-full">
+            <img :src="getAuthData.currentUser.avatar" alt="" class="w-8 h-8 rounded-full">
           </button>
           <transition name="popup">
             <p v-if="hoverState.profile" class="title-hover">Profile</p>
@@ -82,13 +80,13 @@ const handleTouch = (state: ToggleKeySidebar) => {
       </div>
     </div>
     <div v-if="toggleState.profile">
-      <view-profile :profile="profile" @toggle="toggle"></view-profile>
+      <view-profile :profile="getAuthData.currentUser" @toggle="toggle"></view-profile>
     </div>
     <div v-if="toggleState.chat">
       <view-user @logout="logout" @toggle="toggle"></view-user>
     </div>
     <div v-if="toggleState.setting">
-      <view-setting :profile="profile" @logout="logout" @toggle="toggle"></view-setting>
+      <view-setting :profile="getAuthData.currentUser" @logout="logout" @toggle="toggle"></view-setting>
     </div>
 
   </div>

@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue'
 import { formatName } from '@/formatters/name';
 
 const props = defineProps<{ 
-  profile: User[]
+  profile: User
 }>()
 
 const emit = defineEmits<{
@@ -31,7 +31,10 @@ const emitLogout = () => {
       <div class="w-24">
         <img :src="props.profile.avatar" alt="user default" class="rounded-full w-full">
       </div>
-      <p class="font-semibold text-primary-3">{{ formatName(props.profile.name) }}</p>
+      <div class="text-left">
+        <p class="font-semibold text-primary-3 capitalize">{{ formatName(props.profile.email) }}</p>
+        <p class="font-semibold text-primary-3">{{ props.profile.email }}</p>
+      </div>
     </button>
     <div class="">
       <button title="logout" class="btn-menu text-red-500" @click="emitLogout()">

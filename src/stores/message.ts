@@ -6,39 +6,55 @@ export const useMessageStore = defineStore('message', {
     conversations: [] as Conversation[]
   }),
   actions: {
-    loadConversations() {
+    getConversations() {
       const dataConversations = localStorage.getItem('conversations')
       if (dataConversations) {
         this.conversations = JSON.parse(dataConversations)
         }
     },
-    findConversationsById(inputMessage: string, user_1: number, user_2: number) {
-      const findConversationById = this.conversations.find(conv => 
-        conv.user_ids.includes(user_1) && conv.user_ids.includes(user_2)
+    findConversationsById(messageInput: string, user_1: string, user_2: string) {
+      const findConversationById = this.conversations.find(conversation => 
+        conversation.user_ids.includes(user_1) && conversation.user_ids.includes(user_2)
       )
       if (findConversationById) {
-        this.createConversation(inputMessage, user_1, user_2)
+        this.addConversation(messageInput, user_1, user_2)
         } else {
-          this.createConversation(inputMessage, user_1, user_2)
+          this.addConversation(messageInput, user_1, user_2)
         }
       localStorage.setItem('conversations', JSON.stringify(this.conversations))
     },
-    createConversation(inputMessage: string, user_1: number, user_2: number) {
+    addConversation(messageInput: string, user_1: string, user_2: string) {
       this.conversations.push({
         user_ids: [user_1, user_2],
-        messages: this.newMessage(inputMessage, user_2)
+        messages: this.newMessage(messageInput, user_2)
       })
     },
-    newMessage(inputMessage: string, user: number) {
-      const recentDate = new Date()
+    newMessage(messageInput: string, user: string) {
+      const recentDate = new Date().toString()
       const message = []
       message.push({
         user_id: user,
-        message: inputMessage,
-        created_at: recentDate.toString(),
+        message: messageInput,
+        created_at: recentDate,
         read_at: null,
       })
       return message
-    }
+    },
+    markMessagesAsRead(user_1: string, user_2: string) {
+      const recentDate = new Date().toString()
+      const conversation = this.conversations.find(conversation =>
+        conversation.user_ids.includes(user_1) && conversation.user_ids.includes(user_2)
+      )
+      if (conversation) {
+        this.conversations.find(messages => {
+          messages.messages.map(message => {
+              if (message.read_at === null) {
+                message.read_at = recentDate
+              }
+          })
+        })
+      }
+      localStorage.setItem('conversations', JSON.stringify(this.conversations))
+    },
   }
 })
