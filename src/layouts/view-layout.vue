@@ -2,11 +2,8 @@
 import { useRoute } from 'vue-router';
 import ComponentSidebar from './component-sidebar.vue'
 import { computed, watch } from 'vue';
-import { useUserStore } from '@/stores/user';
 
 const route = useRoute()
-const userStore = useUserStore()
-userStore.initializedUsers()
 
 const isMobile = computed(() => {
   return window.innerWidth < 1280
@@ -14,7 +11,6 @@ const isMobile = computed(() => {
 const routeChat = computed(() => {
   return route.name === 'chat'
 })
-
 watch(route, () => {
   if (isMobile.value && route.name === 'chat') {
     document.querySelector('div')?.scrollIntoView({ behavior: 'smooth'})

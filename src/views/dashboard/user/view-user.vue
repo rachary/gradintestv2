@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import ComponentUserlist from './component-userlist.vue'
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
 import { Icon } from '@iconify/vue'
 
 const router = useRouter()
-const userStore = useUserStore()
-const users = computed(() => userStore.getUserList)
 const route = useRoute()
-const searchUser = ref('')
+const props = defineProps<{ 
+  users: User[]
+}>()
+const searchToggleUser = ref('')
 const toggleMenu = ref(false)
 
 const emit = defineEmits<{
@@ -25,8 +25,8 @@ const emitLogout = () => {
   emit('logout')
 }
 
-watch(searchUser, () => {
-  router.push({ query: {...route.query, search: searchUser.value ?? undefined}})
+watch(searchToggleUser, () => {
+  router.push({ query: {...route.query, search: searchToggleUser.value ?? undefined}})
 })
 </script>
 <template>
@@ -57,12 +57,12 @@ watch(searchUser, () => {
     </div>
     <div class="px-1 sm:px-4">
       <div class="flex items-center">
-        <label for="searchUser" class="cursor-pointer">
+        <label for="searchToggleUser" class="cursor-pointer">
           <icon icon="mdi:search" class="pl-2 pr-1 h-10 rounded-l-md text-4xl bg-primary-1 text-secondary-1"></icon>
         </label>
         <input 
-        id="searchUser" 
-        v-model="searchUser"
+        id="searchToggleUser" 
+        v-model="searchToggleUser"
         type="text" 
         class="bg-primary-1 w-full text-secondary-1 rounded-r-md placeholder:text-secondary-1 py-2 pr-2 pl-1" 
         placeholder="Search user...">
@@ -73,7 +73,7 @@ watch(searchUser, () => {
       <p class="bg-gray-100 py-1 px-3 rounded-full text-black">Unread</p>
     </div>
     <div class="h-full w-full overflow-y-scroll">
-      <component-userlist :users="users"></component-userlist>
+      <component-userlist :users="props.users"></component-userlist>
     </div>
   </div>
 </template>

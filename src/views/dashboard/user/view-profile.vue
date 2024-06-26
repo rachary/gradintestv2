@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue'
 import { formatName } from '@/formatters/name';
 
 const props = defineProps<{ 
-  profile: User
+  currentUser: User
 }>()
 
 const emit = defineEmits<{
@@ -24,16 +24,16 @@ const emitToggle = (state: ToggleKeySidebar) => {
     </div>
     <div class="bg-primary-1 w-full flex items-center justify-center py-8">
       <div class="w-56">
-        <img :src="props.profile.avatar" alt="user default" class="rounded-full w-full">
+        <img :src="props.currentUser.avatar" alt="user default" class="rounded-full w-full">
       </div>
     </div>
     <div class="py-4 px-8 space-y-2 text-primary-3 ">
       <p>Your name</p>
-      <p class="font-semibold text-xl capitalize">{{ formatName(props.profile.email) }}</p>
+      <p class="font-semibold text-xl capitalize">{{ formatName(props.currentUser.email) }}</p>
     </div>
     <div class="py-4 px-8 space-y-2 text-primary-3 ">
       <p>Your email</p>
-      <p class="font-semibold text-xl">{{ props.profile.email }}</p>
+      <p class="font-semibold text-xl">{{ props.currentUser.email }}</p>
     </div>
   </div>
 </template>

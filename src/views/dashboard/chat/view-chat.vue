@@ -4,32 +4,53 @@ import ComponentChatHeader from './component-chat-header.vue'
 import ComponentChatConversation from './component-chat-conversation.vue'
 import ComponentChatSearch from './component-chat-search.vue'
 import { useMessageStore } from '@/stores/message';
-import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router';
+import { computed, ref, nextTick, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
+import { useAuthStore } from '@/stores/auth';
 
+const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
+const authStore = useAuthStore()
 const messageStore = useMessageStore()
 messageStore.getConversations()
+
+const currentUser = authStore.authData?.currentUser
 const user = computed(() => userStore.getUserById(String(route.params.id)))
 
+const conversationContainer = ref<HTMLDivElement | null>(null)
 const inputMessage = ref('')
+const inputSearchMessage = ref('')
 const searchMessage = ref(false)
-const submit = () => {
-  messageStore.findConversationsById(inputMessage.value, String(route.params.id), userStore.getCurrentUser.id)
-  inputMessage.value = ''
+
+const searchToggle = () => {
+  searchMessage.value = !searchMessage.value
 }
+
+const submit = () => {
+  messageStore.findConversationsById(inputMessage.value, String(route.params.id), currentUser?.id || '')
+  inputMessage.value = ''
+
+  nextTick(() => {
+    if (conversationContainer.value) {
+      conversationContainer.value.scrollTop = conversationContainer.value.scrollHeight
+    }
+  })
+}
+
+
 </script>
 <template>
   <div class="flex h-full">
-    <div class=" bg-yellow-50 w-full relative flex flex-col justify-between">
+    <div class="bg-yellow-50 w-full relative flex flex-col justify-between" :class="{'w-full duration-500': searchMessage}">
       <img src="/images/background-chat.jpg" class=" w-full absolute h-full object-cover opacity-30 z-0" alt="">
       <p class="absolute opacity-30 text-4xl text-primary-3 font-semibold w-full h-full flex items-center justify-center">gradintest</p>
       <div class="h-auto relative z-20">
-        <component-chat-header :user="user"></component-chat-header>
+
+        <component-chat-header :user="user" @search-toggle="searchToggle"></component-chat-header>
       </div>
-      <div class="h-full overflow-y-auto relative" >
+      <div ref="conversationContainer" class="h-full overflow-y-auto relative">
         <component-chat-conversation :user="user" :conversations="messageStore.conversations"></component-chat-conversation>
       </div>
       <form class="h-auto bg-primary-1 px-2 flex items-center relative z-10 py-1" @submit.prevent="submit">
@@ -39,9 +60,21 @@ const submit = () => {
         </button>
       </form>
     </div>
-    <component-chat-search v-if="searchMessage"></component-chat-search>
+    <transition name="slide-left">
+      <div v-if="searchMessage">
+        <component-chat-search :user="user" :current-user="currentUser" :conversations="messageStore.conversations" @search-toggle="searchToggle"></component-chat-search>
+      </div>
+    </transition>
   </div>
 </template>
 <style lang="postcss" scoped>
-  
+.slide-left-enter-active,
+.slide-left-leave-active {
+  @apply transition translate-x-0
+}
+
+.slide-left-enter-from,
+.slide-left-leave-to {
+  @apply translate-x-full
+}
 </style>

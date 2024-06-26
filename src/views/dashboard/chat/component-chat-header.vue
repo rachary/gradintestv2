@@ -7,17 +7,31 @@ const props = defineProps<{
   user: User | undefined
 }>()
 const closeToggle = ref(false)
+
+const emit = defineEmits<{
+  (e: 'searchToggle'): void
+}>()
+
+const emitToggle = () => {
+  emit('searchToggle')
+}
 </script>
 <template>
-  <div  class="bg-primary-1 h-full flex justify-between items-center pl-3 pr-5 py-1 relative">
+  <div  class="bg-primary-1 h-full flex justify-between items-center pl-3 pr-5 py-2 relative">
     <div class="flex items-center gap-4">
       <img :src="props.user?.avatar" class="w-12 rounded-full" alt="">
       <p class="text-secondary-1 capitalize">{{ formatName(props.user?.email || '') }}</p>
     </div>
     <div class="flex items-center space-x-4">
-      <icon icon="mdi:search" class="text-secondary-1 text-2xl cursor-pointer"></icon>
+      <div>
+        <button @click="emitToggle()">
+          <icon icon="mdi:search" class="text-secondary-1 text-2xl cursor-pointer"></icon>
+        </button>
+      </div>
       <div class="relative">
-        <icon icon="mdi:dots-vertical" class="text-secondary-1 text-3xl cursor-pointer" @click="closeToggle = !closeToggle" ></icon>
+        <button  @click="closeToggle = !closeToggle">
+          <icon icon="mdi:dots-vertical" class="text-secondary-1 text-3xl cursor-pointer"></icon>
+        </button>
         <transition name="slide-down" mode="out-in">
           <div v-if="closeToggle" class="absolute z-10 right-0 shadow-md rounded-sm bg-secondary-1 py-1" @click="closeToggle = !closeToggle">
             <router-link :to="{ name: 'home'}" >
