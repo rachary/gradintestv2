@@ -40,21 +40,44 @@ export const useMessageStore = defineStore('message', {
       })
       return message
     },
-    markMessagesAsRead(user_1: string, user_2: string) {
-      const recentDate = new Date().toString()
-      const conversation = this.conversations.find(conversation =>
-        conversation.user_ids.includes(user_1) && conversation.user_ids.includes(user_2)
-      )
-      if (conversation) {
-        this.conversations.find(messages => {
-          messages.messages.map(message => {
-              if (message.read_at === null) {
-                message.read_at = recentDate
-              }
-          })
-        })
-      }
+    getLatestMessage(user1: string, user2: string) {
+      let latestMessage: Message | null = null
+      this.conversations.forEach(conversation => {
+        if (conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)) {
+          const sortedMessages = conversation.messages.slice().sort((a, b) => 
+          b.created_at.getTime() - a.created_at.getTime())
+          if (sortedMessages.length > 0) {
+            latestMessage = sortedMessages[0]
+          }
+        }
+      });
+      return latestMessage
+    },
+    markMessagesAsRead(user1: string, user2: string) {
+      const recentDate = new Date().toString();
+      this.conversations.forEach(conversation => {
+        if (conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)) {
+          conversation.messages.forEach(message => {
+            if (message.user_id !== user2 && message.read_at == null) {
+              message.read_at = recentDate;
+            }
+          });
+        }
+      });
       localStorage.setItem('conversations', JSON.stringify(this.conversations))
     },
+    countUnreadMessages(user1: string, user2: string) {
+      let unreadCount = 0;
+      this.conversations.forEach(conversation => {
+        if (conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)) {
+          conversation.messages.forEach(message => {
+            if (message.user_id !== user2 && message.read_at == null) {
+              unreadCount++
+            }
+          });
+        }
+      });
+      return unreadCount;
+    }
   }
 })

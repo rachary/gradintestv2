@@ -2,23 +2,40 @@ import { defineStore } from "pinia";
 import { faker } from '@faker-js/faker'
 import { v4 as uuidv4 } from 'uuid';
 import { useAuthStore } from "./auth";
+import { useMessageStore } from "./message";
 
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     users: [] as User[],
-    currentUser: null as User | null,
   }),
   getters: {
-    getCurrentUser() {
-      const authStore = useAuthStore()
-      const currentUser = authStore.getAuthData
-      return currentUser.currentUser
-    },
     getUserList: (state) => {
       const authStore = useAuthStore()
-      const userAuth = authStore.getAuthData.currentUser.id
-      return state.users.filter(user => user.id !== userAuth)
+      const messageStore = useMessageStore()
+      authStore.getAuthData()
+      messageStore.getConversations()
+      const auth = authStore.authData?.currentUser
+      return state.users
+      .filter(user => user.id !== auth?.id)
+      .map(user => {
+        const latestMessage = messageStore.getLatestMessage(user.id, auth?.id || '')?.created_at
+        return {
+          ...user,
+          recentMessage: latestMessage ? latestMessage : null,
+        }
+      })
+      .sort((a, b) => {
+        if (a.recentMessage && b.recentMessage) {
+          return new Date(b.recentMessage).getTime() - new Date(a.recentMessage).getTime()
+        } else if (a.recentMessage) {
+          return -1
+        } else if (b.recentMessage) {
+          return 1
+        } else {
+          return 0
+        }
+      })
     },
   },
   actions: {
@@ -29,7 +46,6 @@ export const useUserStore = defineStore('user', {
       } else {
         this.generatedUsers()
       }
-      return this.users
     },
     getUserById(userId: string) {
       const user = this.users.find(user => user.id === userId)
