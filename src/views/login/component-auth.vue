@@ -54,6 +54,4 @@ const submit = () => {
   </form>
 </template>
 <style lang="postcss" scoped>
-</style>import type { useRoute } from 'vue-router';import type path from 'path';
-import type { useRouter } from 'vue-router';
-
+</style>
