@@ -3,15 +3,22 @@ import { useAuthStore } from '@/stores/auth';
 import ViewProfile from '@/views/dashboard/user/view-profile.vue'
 import ViewUser from '@/views/dashboard/user/view-user.vue'
 import ViewSetting from '@/views/dashboard/user/view-setting.vue'
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
 
 
 const authStore = useAuthStore()
 const router = useRouter()
-const { getAuthData } = storeToRefs(authStore)
+const userStore = useUserStore()
+
+authStore.getAuthData()
+
+userStore.initializedUsers()
+const users = computed(() =>userStore.getUserList)
+const currentUser = authStore.authData?.currentUser
+
 const logout = () => {
   authStore.logout()
   router.push({ name: 'login'})
@@ -22,12 +29,12 @@ const toggleState = ref<ToggleSidebar>({
   chat: true,
   setting: false
 })
-
 const hoverState = ref<ToggleSidebar>({
   profile: false,
   chat: false,
   setting: false
 })
+
 const isTouchDevice = ref(false)
 onMounted(() => {
   isTouchDevice.value = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -71,7 +78,7 @@ const handleTouch = (state: ToggleKeySidebar) => {
         </div>
         <div class="flex items-center">
           <button class="relative rounded-full p-1" :class="{ 'active': toggleState.profile }" @mouseover="handleMouse('profile')" @mouseleave="hoverState.profile = false" @touchstart="handleTouch('profile')" @click="toggle('profile')" >
-            <img :src="getAuthData.currentUser.avatar" alt="" class="w-8 h-8 rounded-full">
+            <img :src="currentUser?.avatar" alt="" class="w-8 h-8 rounded-full">
           </button>
           <transition name="popup">
             <p v-if="hoverState.profile" class="title-hover">Profile</p>
@@ -80,13 +87,13 @@ const handleTouch = (state: ToggleKeySidebar) => {
       </div>
     </div>
     <div v-if="toggleState.profile">
-      <view-profile :profile="getAuthData.currentUser" @toggle="toggle"></view-profile>
+      <view-profile :current-user="currentUser" @toggle="toggle"></view-profile>
     </div>
     <div v-if="toggleState.chat">
-      <view-user @logout="logout" @toggle="toggle"></view-user>
+      <view-user :users="users" @logout="logout" @toggle="toggle"></view-user>
     </div>
     <div v-if="toggleState.setting">
-      <view-setting :profile="getAuthData.currentUser" @logout="logout" @toggle="toggle"></view-setting>
+      <view-setting :current-user="currentUser" @logout="logout" @toggle="toggle"></view-setting>
     </div>
 
   </div>
