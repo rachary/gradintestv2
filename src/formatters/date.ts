@@ -1,4 +1,4 @@
-import { format, isToday, differenceInSeconds, endOfYesterday } from 'date-fns'
+import { format, isToday, differenceInSeconds } from 'date-fns'
 
 export function formatTime(date: Date): string {
   const now = new Date()
@@ -10,10 +10,10 @@ export function formatTime(date: Date): string {
   if (isToday(date)) {
     return format(date, 'HH:mm')
   }
-
-  if (endOfYesterday()) {
-    return 'Yesterday'
-  }
   
+  if (date == null) {
+    return ' '
+  }
+
   return format(date, 'dd/MM/yy')
 }
