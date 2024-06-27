@@ -7,13 +7,11 @@ const props = defineProps<{
   user: User | undefined
 }>()
 const closeToggle = ref(false)
-const searchToggle = ref(false)
 const emit = defineEmits<{
   (e: 'searchToggle'): void
 }>()
 
 const emitToggle = () => {
-  searchToggle.value = !searchToggle.value
   emit('searchToggle')
 }
 </script>
@@ -25,8 +23,8 @@ const emitToggle = () => {
     </div>
     <div class="flex items-center space-x-4">
       <div>
-        <button title="search message" class="p-1 rounded-full duration-300" :class="{ 'bg-secondary-1': searchToggle }" @click="emitToggle()">
-          <icon icon="mdi:search" class="text-secondary-1 text-3xl cursor-pointer" :class="{ '!text-primary-1': searchToggle }"></icon>
+        <button title="search message" class="p-1 rounded-full duration-300" @click="emitToggle()">
+          <icon icon="mdi:search" class="text-secondary-1 text-3xl cursor-pointer" ></icon>
         </button>
       </div>
       <div class="relative">

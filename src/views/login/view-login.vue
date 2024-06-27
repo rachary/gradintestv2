@@ -28,7 +28,7 @@ console.log(isAuth.value)
         </div>
       </div>
       <div class="w-1/2 h-full bg-secondary-1 flex items-center justify-center">
-        <div class="w-1/2 relative">
+        <div class="w-1/2 relative hidden xl:block">
           <img src="/images/laptop.png" alt="" class="w-full">
           <img src="/images/1.png" alt="" class="absolute top-4  right-[60px] w-[75%] object-fill h-[62%]">
           <img src="/images/2.png" alt="" class="absolute top-4  right-[60px] w-[75%] object-fill h-[62%]">
