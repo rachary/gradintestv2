@@ -2,22 +2,20 @@
 import { formatName } from '@/formatters/name'
 import { useAuthStore } from '@/stores/auth';
 import { useMessageStore } from '@/stores/message';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { formatTime } from '@/formatters/date'
 
 const props = defineProps<{ users: User[] }>()
 const route = useRoute()
-
+const authStore = useAuthStore()
+const currentUser = authStore.authData?.currentUser
+const messageStore = useMessageStore()
 const filteredUsers = computed<User[]>(() => {
   return props.users.filter((user) => 
     user.email.toLowerCase().includes(route.query.search ? String(route.query.search).toLowerCase() : '')
   )
 })
-const authStore = useAuthStore()
-const currentUser = authStore.authData?.currentUser
-const messageStore = useMessageStore()
-
 const markAsRead = (user1: string, user2: string) => {
   messageStore.markMessagesAsRead(user1, user2)
 }
@@ -35,6 +33,7 @@ const fetchUnreadMessage = (user1: string, user2: string) => {
       return null
     }
 }
+
 </script>
 
 <template>
@@ -49,7 +48,7 @@ const fetchUnreadMessage = (user1: string, user2: string) => {
           <p class="text-xs">{{ formatTime(fetchLatestMessage(user.id, currentUser?.id || '')?.created_at) }}</p>
         </div>
         <div class="flex justify-between items-left gap-2 text-base h-full py-1">
-          <p class="truncate w-[74vw] xl:w-[20.75vw]">
+          <p class="truncate w-[74vw] xl:w-[24.75vw]">
             <span v-if="fetchLatestMessage(user.id, currentUser?.id || '')">{{ fetchLatestMessage(user.id, currentUser?.id || '')?.message }}</span>
             <span v-else class="italic "> Start chatting now!</span>
           </p>

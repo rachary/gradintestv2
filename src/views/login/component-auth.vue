@@ -25,7 +25,8 @@ const submit = () => {
         <label for="username" class="text-xs text-secondary-1 tracking-wide">Username:</label>
         <input 
         id="username" 
-        v-model="account.username" 
+        v-model="account.username"
+        v-focus 
         class="border-b text-secondary-1 accent-transparent border-secondary-1 bg-primary-1 text-base w-full py-1 active:outline" 
         type="email" 
         required>

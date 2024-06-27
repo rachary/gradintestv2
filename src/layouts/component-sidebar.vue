@@ -16,8 +16,13 @@ const userStore = useUserStore()
 authStore.getAuthData()
 
 userStore.initializedUsers()
-const users = computed(() =>userStore.getUserList)
+
+const isAuth = computed(() => authStore.authData?.userAuth) 
+
+console.log(isAuth.value)
 const currentUser = authStore.authData?.currentUser
+
+
 
 const logout = () => {
   authStore.logout()
@@ -90,7 +95,7 @@ const handleTouch = (state: ToggleKeySidebar) => {
       <view-profile :current-user="currentUser" @toggle="toggle"></view-profile>
     </div>
     <div v-if="toggleState.chat">
-      <view-user :users="users" @logout="logout" @toggle="toggle"></view-user>
+      <view-user @logout="logout" @toggle="toggle"></view-user>
     </div>
     <div v-if="toggleState.setting">
       <view-setting :current-user="currentUser" @logout="logout" @toggle="toggle"></view-setting>

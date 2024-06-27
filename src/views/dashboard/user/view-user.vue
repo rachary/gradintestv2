@@ -3,15 +3,13 @@ import ComponentUserlist from './component-userlist.vue'
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
+import { useUserStore } from '@/stores/user';
 
 const router = useRouter()
 const route = useRoute()
-const props = defineProps<{ 
-  users: User[]
-}>()
+const userStore = useUserStore()
 const searchToggleUser = ref('')
 const toggleMenu = ref(false)
-
 const emit = defineEmits<{
   (e: 'toggle', state: ToggleKeySidebar): void
   (e: 'logout'): void
@@ -39,7 +37,7 @@ watch(searchToggleUser, () => {
         </button>
         <transition name="popup">
           <div v-if="toggleMenu" class="absolute z-10 bg-primary-2 py-1 scale-100 shadow-card top-10 right-0">
-            <button class="btn-menu" @click="emitToggle('profile')">
+            <button class="btn-menu " @click="emitToggle('profile')">
               <icon icon="mdi:user" class="text-2xl"></icon>
               <p class="">Profile</p>
             </button>
@@ -55,7 +53,7 @@ watch(searchToggleUser, () => {
         </transition>
       </div>
     </div>
-    <div class="px-1 sm:px-4">
+    <div class="px-1 pb-2 sm:px-4">
       <div class="flex items-center">
         <label for="searchToggleUser" class="cursor-pointer">
           <icon icon="mdi:search" class="pl-2 pr-1 h-10 rounded-l-md text-4xl bg-primary-1 text-secondary-1"></icon>
@@ -68,12 +66,9 @@ watch(searchToggleUser, () => {
         placeholder="Search user...">
       </div>
     </div>
-    <div class="flex gap-2 px-4 py-2">
-      <p class="bg-primary-1 py-1 px-3 rounded-full text-secondary-1">All</p>
-      <p class="bg-gray-100 py-1 px-3 rounded-full text-black">Unread</p>
-    </div>
-    <div class="h-full w-full overflow-y-scroll">
-      <component-userlist :users="props.users"></component-userlist>
+    <div class="h-full w-full min-w-[640px] overflow-y-scroll">
+      <component-userlist :users="userStore.getUserList"></component-userlist>
+      <p v-show="userStore.getUserList.length === 0">User not found!</p>
     </div>
   </div>
 </template>
@@ -84,7 +79,7 @@ watch(searchToggleUser, () => {
   -moz-box-shadow: 0px 1.5px 3px 1px rgba(0,0,0,0.50);
 }
 .btn-menu {
-  @apply flex gap-2 px-8 py-1 text-secondary-1 hover:bg-slate-300 hover:bg-opacity-50
+  @apply flex gap-2 px-8 py-1 text-secondary-1 hover:bg-slate-300 hover:bg-opacity-50 w-full
 }
 .popup-enter-active,
 .popup-leave-active {
@@ -93,6 +88,6 @@ watch(searchToggleUser, () => {
 
 .popup-enter-from,
 .popup-leave-to {
-  @apply opacity-0 scale-50 -translate-y-10 translate-x-10
+  @apply opacity-0 scale-50 -translate-y-10 translate-x-7
 }
 </style>
