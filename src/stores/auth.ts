@@ -30,12 +30,12 @@ export const useAuthStore = defineStore('auth', {
         currentUser = userStore.addUser(userEmail)
       }
       this.isLoggedIn = true
-      localStorage.setItem('authentication', JSON.stringify({ userAuth: this.isLoggedIn, currentUser: currentUser }))
+      localStorage.setItem('authentication', JSON.stringify({ userAuth: true, currentUser: currentUser }))
     },
     logout() {
       this.isLoggedIn = false
       this.authData = null
-      localStorage.setItem('authentication', JSON.stringify({ userAuth: this.isLoggedIn, currentUser: null }))
+      localStorage.setItem('authentication', JSON.stringify({ userAuth: false, currentUser: null }))
     },
   }
 })
