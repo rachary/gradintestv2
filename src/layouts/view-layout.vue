@@ -4,7 +4,6 @@ import ComponentSidebar from './component-sidebar.vue'
 import { computed, watch } from 'vue';
 
 const route = useRoute()
-
 const isMobile = computed(() => {
   return window.innerWidth < 1280
 })
