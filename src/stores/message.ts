@@ -12,21 +12,27 @@ export const useMessageStore = defineStore('message', {
         this.conversations = JSON.parse(dataConversations)
         }
     },
-    findConversationsById(messageInput: string, user_1: string, user_2: string) {
+    getFilterMessage(user1: string, user2: string) {
+      const filterMessage = this.conversations.filter(conversation => 
+        conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)
+      )
+      return filterMessage
+    },
+    findConversationsById(messageInput: string, user1: string, user2: string) {
       const findConversationById = this.conversations.find(conversation => 
-        conversation.user_ids.includes(user_1) && conversation.user_ids.includes(user_2)
+        conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)
       )
       if (findConversationById) {
-        this.addConversation(messageInput, user_1, user_2)
+        this.addConversation(messageInput, user1, user2)
         } else {
-          this.addConversation(messageInput, user_1, user_2)
+          this.addConversation(messageInput, user1, user2)
         }
       localStorage.setItem('conversations', JSON.stringify(this.conversations))
     },
-    addConversation(messageInput: string, user_1: string, user_2: string) {
+    addConversation(messageInput: string, user1: string, user2: string) {
       this.conversations.push({
-        user_ids: [user_1, user_2],
-        messages: this.newMessage(messageInput, user_2)
+        user_ids: [user1, user2],
+        messages: this.newMessage(messageInput, user2)
       })
     },
     newMessage(messageInput: string, user: string) {
