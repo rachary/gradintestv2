@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue'
 import { formatName } from '@/formatters/name';
 
 const props = defineProps<{ 
-  currentUser: User
+  currentUser: User | undefined
 }>()
 
 const emit = defineEmits<{
@@ -29,11 +29,11 @@ const emitLogout = () => {
     </div>
     <button class="btn-menu py-8" @click="emitToggle('profile')">
       <div class="w-24">
-        <img :src="props.currentUser.avatar" alt="user default" class="rounded-full w-full">
+        <img :src="props.currentUser?.avatar" alt="user default" class="rounded-full w-full">
       </div>
       <div class="text-left">
-        <p class="font-semibold text-primary-3 capitalize">{{ formatName(props.currentUser.email) }}</p>
-        <p class="font-semibold text-primary-3">{{ props.currentUser.email }}</p>
+        <p class="font-semibold text-primary-3 capitalize">{{ formatName(props.currentUser?.email || '') }}</p>
+        <p class="font-semibold text-primary-3">{{ props.currentUser?.email }}</p>
       </div>
     </button>
     <div class="">

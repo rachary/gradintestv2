@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue'
 import { formatName } from '@/formatters/name';
 
 const props = defineProps<{ 
-  currentUser: User
+  currentUser: User | undefined
 }>()
 
 const emit = defineEmits<{

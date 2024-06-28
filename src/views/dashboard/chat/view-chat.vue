@@ -15,7 +15,7 @@ const authStore = useAuthStore()
 const messageStore = useMessageStore()
 messageStore.getConversations()
 
-const currentUser = authStore.authData?.currentUser
+const currentUser = authStore.getUserAuthentication || undefined
 const user = computed(() => userStore.getUserById(String(route.params.id)))
 
 const conversationContainer = ref<HTMLDivElement | null>(null)
@@ -36,11 +36,7 @@ const submit = () => {
     }
   })
 }
-const setFocus = () => {
-  nextTick(() => {
-    inputMessage.value.focus()
-  })
-}
+
 </script>
 <template>
   <div class="flex h-full">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ComponentUserlist from './component-userlist.vue'
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
 import { useUserStore } from '@/stores/user';
@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/user';
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
-const searchToggleUser = ref('')
+const searchUser = ref('')
 const toggleMenu = ref(false)
 const emit = defineEmits<{
   (e: 'toggle', state: ToggleKeySidebar): void
@@ -23,12 +23,13 @@ const emitLogout = () => {
   emit('logout')
 }
 
-watch(searchToggleUser, () => {
-  router.push({ query: {...route.query, search: searchToggleUser.value ?? undefined}})
+const filteredUsers = computed(() => {
+  return userStore.getUserList.filter((user) => 
+    user.email.toLowerCase().includes(searchUser.value.toLowerCase()))
 })
 </script>
 <template>
-  <div class="border-l border-gray-300 h-full xl:pr-1 select-none flex flex-col justify-between">
+  <div class="border-l border-gray-300 h-full xl:pr-1 select-none w-full flex flex-col justify-between">
     <div class="w-full py-3 px-4 flex justify-between items-center">
       <p class="text-2xl font-extrabold text-primary-3">Chats</p>
       <div class="relative flex items-center">
@@ -53,22 +54,22 @@ watch(searchToggleUser, () => {
         </transition>
       </div>
     </div>
-    <div class="px-1 pb-2 sm:px-4">
+    <div class="px-1 pb-2 sm:pr-3 sm:pl-4">
       <div class="flex items-center">
-        <label for="searchToggleUser" class="cursor-pointer">
+        <label for="searchUser" class="cursor-pointer">
           <icon icon="mdi:search" class="pl-2 pr-1 h-10 rounded-l-md text-4xl bg-primary-1 text-secondary-1"></icon>
         </label>
         <input 
-        id="searchToggleUser" 
-        v-model="searchToggleUser"
+        id="searchUser" 
+        v-model="searchUser"
         type="text" 
         class="bg-primary-1 w-full text-secondary-1 rounded-r-md placeholder:text-secondary-1 py-2 pr-2 pl-1" 
         placeholder="Search user...">
       </div>
     </div>
-    <div class="h-full w-full min-w-[640px] overflow-y-scroll">
-      <component-userlist :users="userStore.getUserList"></component-userlist>
-      <p v-show="userStore.getUserList.length === 0">User not found!</p>
+    <div class="h-full w-full overflow-y-scroll">
+      <component-userlist :users="filteredUsers"></component-userlist>
+      <p v-show="filteredUsers.length === 0">User not found!</p>
     </div>
   </div>
 </template>

@@ -7,22 +7,17 @@ import { computed, onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
+import { useMessageStore } from '@/stores/message';
 
 
 const authStore = useAuthStore()
 const router = useRouter()
 const userStore = useUserStore()
-
-authStore.getAuthData()
-
+const messageStore = useMessageStore()
+messageStore.generateMessagesForAllConversations()
 userStore.initializedUsers()
 
-const isAuth = computed(() => authStore.authData?.userAuth) 
-
-console.log(isAuth.value)
-const currentUser = authStore.authData?.currentUser
-
-
+const currentUser = authStore.getUserAuthentication || undefined
 
 const logout = () => {
   authStore.logout()
@@ -59,6 +54,7 @@ const handleTouch = (state: ToggleKeySidebar) => {
   isTouchDevice.value = true
   hoverState.value[state] = false
 }
+
 </script>
 
 <template>
@@ -94,7 +90,7 @@ const handleTouch = (state: ToggleKeySidebar) => {
     <div v-if="toggleState.profile">
       <view-profile :current-user="currentUser" @toggle="toggle"></view-profile>
     </div>
-    <div v-if="toggleState.chat">
+    <div v-if="toggleState.chat" class="w-full">
       <view-user @logout="logout" @toggle="toggle"></view-user>
     </div>
     <div v-if="toggleState.setting">

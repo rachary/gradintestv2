@@ -1,16 +1,10 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth';
 import ComponentAuth from './component-auth.vue';
 import { useUserStore } from '@/stores/user';
-import { computed } from 'vue';
 import { VueWriter } from 'vue-writer'
 
 const userStore = useUserStore()
 userStore.initializedUsers()
-const authStore = useAuthStore()
-authStore.getAuthData()
-const isAuth = computed(() => authStore.authData?.userAuth) 
-console.log(isAuth.value)
 </script>
 
 <template>
@@ -28,11 +22,7 @@ console.log(isAuth.value)
         </div>
       </div>
       <div class="w-1/2 h-full bg-secondary-1 items-center justify-center hidden md:flex">
-        <div class="w-1/2 relative hidden xl:flex">
-          <img src="/images/laptop.png" alt="" class="w-full">
-          <img src="/images/1.png" alt="" class="absolute top-4  right-[60px] w-[75%] object-fill h-[62%]">
-          <img src="/images/2.png" alt="" class="absolute top-4  right-[60px] w-[75%] object-fill h-[62%]">
-        </div>
+
       </div>
     </div>
   </main>

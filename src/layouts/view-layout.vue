@@ -22,10 +22,10 @@ watch(route, () => {
   <img src="/images/background-1.jpg" alt="" class="w-full object-cover h-full absolute">
   <div class="h-screen w-full py-0 px-0 xl:py-5 xl:px-7 flex items-center justify-between">
     <div class="w-full h-full overflow-hidden xl:rounded-lg shadow-md z-20 relative flex">
-      <div :class="{'hidden': isMobile && routeChat}" class="w-full xl:w-1/2">
+      <div :class="{'hidden': isMobile && routeChat}" class="w-full xl:w-1/3">
         <component-sidebar></component-sidebar>
       </div>
-      <div class="w-full block" :class="{'hidden': isMobile && !routeChat}">
+      <div class="w-full xl:w-2/3 block" :class="{'hidden': isMobile && !routeChat}">
         <router-view></router-view>
       </div>
     </div>
