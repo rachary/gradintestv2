@@ -3,23 +3,32 @@ import { useUserStore } from "./user";
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    isLoggedIn: false,
-    authData: null as Auth | null
   }),
   getters: {
+    getAuthentication: () => {
+      const storedAuth = localStorage.getItem('authentication')
+      let isAuthenticated = null
+      if (storedAuth) {
+        const authentication = JSON.parse(storedAuth)
+        isAuthenticated = authentication.isAuthenticated
+      }
+      return isAuthenticated
+    },
+    getUserAuthentication: () => {
+      const storedAuth = localStorage.getItem('authentication')
+      let user = null as User | null
+      if (storedAuth) {
+        const authentication = JSON.parse(storedAuth)
+        user = authentication.user
+      }
+      return user
+    }
   },
   actions: {
-    getAuthData() {
-      const storedAuth = localStorage.getItem('authentication')
-      if (storedAuth) {
-        this.authData = JSON.parse(storedAuth)
-      }
-      return this.authData
-    },
     login(userEmail: string) {
       const userStore = useUserStore()
       const user = userStore.getUserByEmail(userEmail)
-      let currentUser
+      let currentUser = null as User | null
       if (user) {
         currentUser = {
           id: user.id,
@@ -29,13 +38,12 @@ export const useAuthStore = defineStore('auth', {
       } else {
         currentUser = userStore.addUser(userEmail)
       }
-      this.isLoggedIn = true
-      localStorage.setItem('authentication', JSON.stringify({ userAuth: true, currentUser: currentUser }))
+      const isAuthenticated = true
+      localStorage.setItem('authentication', JSON.stringify({ isAuthenticated: isAuthenticated, user: currentUser }))
     },
     logout() {
-      this.isLoggedIn = false
-      this.authData = null
-      localStorage.setItem('authentication', JSON.stringify({ userAuth: false, currentUser: null }))
+      const isAuthenticated = false
+      localStorage.setItem('authentication', JSON.stringify({ isAuthenticated: isAuthenticated, user: null }))
     },
   }
 })
