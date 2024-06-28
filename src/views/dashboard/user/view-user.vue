@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import ComponentUserlist from './component-userlist.vue'
-import { computed, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, ref } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useUserStore } from '@/stores/user';
+import { useMessageStore } from '@/stores/message';
 
-const router = useRouter()
-const route = useRoute()
+
 const userStore = useUserStore()
 const searchUser = ref('')
 const toggleMenu = ref(false)

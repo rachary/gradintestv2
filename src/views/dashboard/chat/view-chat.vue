@@ -14,7 +14,6 @@ const userStore = useUserStore()
 const authStore = useAuthStore()
 const messageStore = useMessageStore()
 messageStore.getConversations()
-
 const currentUser = authStore.getUserAuthentication || undefined
 const user = computed(() => userStore.getUserById(String(route.params.id)))
 

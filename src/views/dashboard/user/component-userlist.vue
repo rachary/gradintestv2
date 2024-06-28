@@ -46,7 +46,7 @@ const fetchUnreadMessage = (user1: string, user2: string) => {
         <div class="flex justify-between items-left gap-2 text-base h-full py-1">
           <div class="w-full">
             <p v-if="fetchLatestMessage(user.id, currentUser?.id || '')" class="line-clamp-1">
-              {{ fetchLatestMessage(user.id, currentUser?.id || '')?.message }}>
+              {{ fetchLatestMessage(user.id, currentUser?.id || '')?.message }}
             </p>
             <p v-else class="italic">Start chatting now!</p>
           </div>

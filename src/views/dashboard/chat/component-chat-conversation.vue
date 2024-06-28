@@ -10,7 +10,7 @@ const props = defineProps<{
 }>()
 
 const authStore = useAuthStore()
-const currentUser = authStore.authData?.currentUser || undefined
+const currentUser = authStore.getUserAuthentication
 
 const conversations = computed(() => 
   props.conversations.filter(conversation => 

@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth';
 import ViewProfile from '@/views/dashboard/user/view-profile.vue'
 import ViewUser from '@/views/dashboard/user/view-user.vue'
 import ViewSetting from '@/views/dashboard/user/view-setting.vue'
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
@@ -14,10 +14,9 @@ const authStore = useAuthStore()
 const router = useRouter()
 const userStore = useUserStore()
 const messageStore = useMessageStore()
-messageStore.generateMessagesForAllConversations()
-userStore.initializedUsers()
-
 const currentUser = authStore.getUserAuthentication || undefined
+userStore.initializedUsers()
+messageStore.generateRandomMessage()
 
 const logout = () => {
   authStore.logout()
