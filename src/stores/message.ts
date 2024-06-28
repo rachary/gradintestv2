@@ -1,11 +1,24 @@
 import { defineStore } from "pinia";
 import { useAuthStore } from "./auth";
 import { useUserStore } from "./user";
+import { faker } from "@faker-js/faker";
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
     message: [] as Message[],
-    conversations: [] as Conversation[]
+    conversations: [] as Conversation[],
+    greetings: [
+      "hello"
+    , "ciao"
+    , "welcome"
+    , "howdy"
+    , "greetings"
+    , "salut"
+    , "hallo"
+    , "hola"
+    , "Gday"
+    , "Hey"
+    ]
   }),
   getters: {
 
@@ -22,6 +35,19 @@ export const useMessageStore = defineStore('message', {
         conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)
       )
       return filterMessage
+    },
+    generateRandomMessage() {
+      const userStore = useUserStore()
+      const authStore = useAuthStore()
+      const users = userStore.users
+      const currentUser = authStore.getUserAuthentication
+      const randomNumber = Math.floor(Math.random() * 10)
+      const generated = users.forEach(user => {
+          this.findConversationsById(faker.word.preposition(100), currentUser?.id || '', user.id)
+        })
+      for (let i = 0; i < randomNumber; i++) {
+        generated
+      }
     },
     findConversationsById(messageInput: string, user1: string, user2: string) {
       const findConversationById = this.conversations.find(conversation => 
@@ -51,47 +77,7 @@ export const useMessageStore = defineStore('message', {
       })
       return message
     },
-    generateRandomMessage() {
-      const randomMessages = [
-        'Hello there!',
-        'How are you?',
-        'Whats up?',
-        'Good morning!',
-        'Good night!',
-        'See you soon!',
-        'Take care!',
-        'Have a great day!'
-      ];
-      const randomIndex = Math.floor(Math.random() * randomMessages.length);
-      return randomMessages[randomIndex];
-    },
-    addMessageToConversation(conversation: Conversation, messageInput: string, user: string) {
-      const message = this.newMessage(messageInput, user);
-      conversation.messages.push(...message);
-      localStorage.setItem('conversations', JSON.stringify(this.conversations));
-    },
-    generateMessagesForAllConversations() {
-      const userStore = useUserStore()
-      const authStore = useAuthStore()
-      const users = userStore.users
-      const currentUser = authStore.getUserAuthentication
-      users.forEach(user1 => {
-        users.forEach(user2 => {
-          if (user1 !== user2) {
-            const findConversation = this.conversations.find(conversation => 
-              conversation.user_ids.includes(user1.id) && conversation.user_ids.includes(user2.id)
-            )
-            for (let i = 0; i < 5; i++) {
-              const randomMessage = this.generateRandomMessage();
-              const randomUser = user1.id
-              this.addMessageToConversation(findConversation!, randomMessage, randomUser);
-            }
-          }
-        })
-      })
 
-      localStorage.setItem('conversations', JSON.stringify(this.conversations));
-    },
     getLatestMessage(user1: string, user2: string) {
       let latestMessage: Message | null = null
       this.conversations.forEach(conversation => {
