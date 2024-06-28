@@ -30,27 +30,25 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/views/login/view-login.vue')
     }
-
   ]
 })
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  authStore.getAuthData()
-  const userAuth = authStore.authData?.userAuth
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!userAuth) {
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath }
-      });
-    } else {
-      next()
-    }
-  } else if (to.path === '/login' && userAuth) {
-    next({ name: 'home'})
-  } else {
-    next()
-  }
-})
+
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore()
+//   const isAuthenticated = authStore.getAuthentication
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     if (!isAuthenticated) {
+//       next({
+//         path: '/login',
+//       });
+//     } else {
+//       next()
+//     }
+//   } else if (to.path === '/login' && isAuthenticated) {
+//     next({ path: '/'})
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

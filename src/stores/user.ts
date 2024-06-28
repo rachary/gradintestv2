@@ -13,9 +13,8 @@ export const useUserStore = defineStore('user', {
     getUserList: (state) => {
       const authStore = useAuthStore()
       const messageStore = useMessageStore()
-      authStore.getAuthData()
       messageStore.getConversations()
-      const auth = authStore.authData?.currentUser
+      const auth = authStore.getUserAuthentication
       return state.users
       .filter(user => user.id !== auth?.id)
       .map(user => {
