@@ -8,9 +8,9 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/layouts/view-layout.vue'),
-      // meta: {
-      //   requiresAuth: true
-      // },
+      meta: {
+        requiresAuth: true
+      },
       children: [
         {
           path: '',
@@ -33,22 +33,22 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   const authStore = useAuthStore()
-//   const isAuthenticated = authStore.getAuthentication
-//   if (to.matched.some(record => record.meta.requiresAuth)) {
-//     if (!isAuthenticated) {
-//       next({
-//         path: '/login',
-//       });
-//     } else {
-//       next()
-//     }
-//   } else if (to.path === '/login' && isAuthenticated) {
-//     next({ path: '/'})
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.getAuthentication
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      next({
+        name: 'login',
+      });
+    } else {
+      next()
+    }
+  } else if (to.name === 'login' && isAuthenticated) {
+    next({ name: 'home'})
+  } else {
+    next()
+  }
+})
 
 export default router
