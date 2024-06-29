@@ -2,7 +2,9 @@
 import { useRoute } from 'vue-router';
 import ComponentSidebar from './component-sidebar.vue'
 import { computed, watch } from 'vue';
-
+// import { useMessageStore } from '@/stores/message';
+// const messageStore = useMessageStore()
+// messageStore.generateRandomMessage()
 const route = useRoute()
 const isMobile = computed(() => {
   return window.innerWidth < 1280

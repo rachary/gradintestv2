@@ -3,21 +3,20 @@ import { useAuthStore } from '@/stores/auth';
 import ViewProfile from '@/views/dashboard/user/view-profile.vue'
 import ViewUser from '@/views/dashboard/user/view-user.vue'
 import ViewSetting from '@/views/dashboard/user/view-setting.vue'
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
-import { useMessageStore } from '@/stores/message';
 
 
 const authStore = useAuthStore()
 const router = useRouter()
 const userStore = useUserStore()
-const messageStore = useMessageStore()
-const currentUser = authStore.getUserAuthentication || undefined
-userStore.initializedUsers()
-messageStore.generateRandomMessage()
 
+userStore.initializedUsers()
+authStore.initializedAuthentication()
+const currentUser = computed(() => authStore.getUserAuthentication)
+const users = computed(() => userStore.getUserList)
 const logout = () => {
   authStore.logout()
   router.push({ name: 'login'})
@@ -90,7 +89,7 @@ const handleTouch = (state: ToggleKeySidebar) => {
       <view-profile :current-user="currentUser" @toggle="toggle"></view-profile>
     </div>
     <div v-if="toggleState.chat" class="w-full">
-      <view-user @logout="logout" @toggle="toggle"></view-user>
+      <view-user :users="users" @logout="logout" @toggle="toggle"></view-user>
     </div>
     <div v-if="toggleState.setting">
       <view-setting :current-user="currentUser" @logout="logout" @toggle="toggle"></view-setting>

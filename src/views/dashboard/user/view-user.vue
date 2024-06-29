@@ -2,11 +2,10 @@
 import ComponentUserlist from './component-userlist.vue'
 import { computed, ref } from 'vue';
 import { Icon } from '@iconify/vue'
-import { useUserStore } from '@/stores/user';
-import { useMessageStore } from '@/stores/message';
 
-
-const userStore = useUserStore()
+const props = defineProps<{ 
+  users: User[],
+}>()
 const searchUser = ref('')
 const toggleMenu = ref(false)
 const emit = defineEmits<{
@@ -23,7 +22,7 @@ const emitLogout = () => {
 }
 
 const filteredUsers = computed(() => {
-  return userStore.getUserList.filter((user) => 
+  return props.users.filter((user) => 
     user.email.toLowerCase().includes(searchUser.value.toLowerCase()))
 })
 </script>
@@ -68,7 +67,7 @@ const filteredUsers = computed(() => {
     </div>
     <div class="h-full w-full overflow-y-scroll">
       <component-userlist :users="filteredUsers"></component-userlist>
-      <p v-show="filteredUsers.length === 0">User not found!</p>
+      <p v-show="filteredUsers.length === 0" class="text-center py-8 tracking-wider font-semibold text-primary-3">User not found!</p>
     </div>
   </div>
 </template>

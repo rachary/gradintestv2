@@ -10,7 +10,6 @@ const props = defineProps<{ users: User[] }>()
 const authStore = useAuthStore()
 const currentUser = authStore.getUserAuthentication
 const messageStore = useMessageStore()
-
 const markAsRead = (user1: string, user2: string) => {
   messageStore.markMessagesAsRead(user1, user2)
 }
