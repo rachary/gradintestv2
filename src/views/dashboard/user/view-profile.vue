@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { formatName } from '@/formatters/name';
-import { computed } from 'vue';
 
 const props = defineProps<{ 
   currentUser: User | undefined

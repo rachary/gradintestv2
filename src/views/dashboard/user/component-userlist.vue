@@ -2,8 +2,6 @@
 import { formatName } from '@/formatters/name'
 import { useAuthStore } from '@/stores/auth';
 import { useMessageStore } from '@/stores/message';
-import { computed, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import { formatTime } from '@/formatters/date'
 
 const props = defineProps<{ users: User[] }>()
