@@ -5,8 +5,8 @@ import { faker } from "@faker-js/faker";
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
-    message: [] as Message[],
     conversations: [] as Conversation[],
+    latestMessage: null as Message | null,
     greetings: [
       "hello"
     , "ciao"
@@ -77,7 +77,6 @@ export const useMessageStore = defineStore('message', {
       })
       return message
     },
-
     getLatestMessage(user1: string, user2: string) {
       let latestMessage: Message | null = null
       this.conversations.forEach(conversation => {

@@ -15,7 +15,7 @@ const userStore = useUserStore()
 
 userStore.initializedUsers()
 authStore.initializedAuthentication()
-const currentUser = computed(() => authStore.getUserAuthentication)
+const currentUser = computed(() => authStore.getUserAuthentication || undefined)
 const users = computed(() => userStore.getUserList)
 const logout = () => {
   authStore.logout()
@@ -52,7 +52,6 @@ const handleTouch = (state: ToggleKeySidebar) => {
   isTouchDevice.value = true
   hoverState.value[state] = false
 }
-
 </script>
 
 <template>
