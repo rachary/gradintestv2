@@ -8,9 +8,9 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/layouts/view-layout.vue'),
-      meta: {
-        requiresAuth: true
-      },
+      // meta: {
+      //   requiresAuth: true
+      // },
       children: [
         {
           path: '',

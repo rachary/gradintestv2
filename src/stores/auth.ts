@@ -3,32 +3,28 @@ import { useUserStore } from "./user";
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
+    authentication: null as Authentication | null
   }),
   getters: {
-    getAuthentication: () => {
-      const storedAuth = localStorage.getItem('authentication')
-      let isAuthenticated = null
-      if (storedAuth) {
-        const authentication = JSON.parse(storedAuth)
-        isAuthenticated = authentication.isAuthenticated
-      }
-      return isAuthenticated
+    getAuthentication: (state) => {
+      return state.authentication?.is_authenticated
     },
-    getUserAuthentication: () => {
-      const storedAuth = localStorage.getItem('authentication')
-      let user = null as User | null
-      if (storedAuth) {
-        const authentication = JSON.parse(storedAuth)
-        user = authentication.user
-      }
-      return user
-    }
+    getUserAuthentication: (state) => {
+      return state.authentication?.user
+    },
   },
   actions: {
+    initializedAuthentication() {
+      const storedAuth = localStorage.getItem('authentication')
+      if (storedAuth) {
+        this.authentication = JSON.parse(storedAuth)
+      }
+      console.log(this.authentication)
+    },
     login(userEmail: string) {
       const userStore = useUserStore()
       const user = userStore.getUserByEmail(userEmail)
-      let currentUser = null as User | null
+      let currentUser = this.getUserAuthentication
       if (user) {
         currentUser = {
           id: user.id,
@@ -38,12 +34,10 @@ export const useAuthStore = defineStore('auth', {
       } else {
         currentUser = userStore.addUser(userEmail)
       }
-      const isAuthenticated = true
-      localStorage.setItem('authentication', JSON.stringify({ isAuthenticated: isAuthenticated, user: currentUser }))
+      localStorage.setItem('authentication', JSON.stringify({ isAuthenticated: this.getAuthentication, user: currentUser }))
     },
     logout() {
-      const isAuthenticated = false
-      localStorage.setItem('authentication', JSON.stringify({ isAuthenticated: isAuthenticated, user: null }))
+      localStorage.setItem('authentication', JSON.stringify({ isAuthenticated: this.getAuthentication, user: null }))
     },
   }
 })

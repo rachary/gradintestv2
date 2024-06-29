@@ -88,7 +88,7 @@ export const useMessageStore = defineStore('message', {
             latestMessage = sortedMessages[0]
           }
         }
-      });
+      })
       return latestMessage
     },
     markMessagesAsRead(user1: string, user2: string) {
@@ -97,7 +97,7 @@ export const useMessageStore = defineStore('message', {
         if (conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)) {
           conversation.messages.forEach(message => {
             if (message.user_id !== user2 && message.read_at == null) {
-              message.read_at = recentDate;
+              message.read_at = recentDate
             }
           });
         }
@@ -115,7 +115,7 @@ export const useMessageStore = defineStore('message', {
           });
         }
       });
-      return unreadCount;
+      return unreadCount
     }
   }
 })
