@@ -54,7 +54,7 @@ const submit = () => {
       <div ref="conversationContainer" class="message-container h-full overflow-y-auto relative">
         <component-chat-conversation :user="user" :messages="messageStore.messages"></component-chat-conversation>
       </div>
-      <form class="h-auto bg-primary-1 dark:bg-primary-2 px-2 flex items-center relative z-10 py-1" @submit.prevent="submit">
+      <form class="h-auto bg-primary-1 dark:bg-primary-2 duration-200 px-2 flex items-center relative z-10 py-1" @submit.prevent="submit">
         <input ref="input" v-model="inputMessage" v-focus type="text" placeholder="Type a message..." class="w-full py-2 px-2 rounded-md" required>
         <button type="submit" class="pr-2 pl-4" title="send message">
           <icon icon="mdi:paper-airplane" class="text-2xl text-secondary-1"></icon>

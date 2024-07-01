@@ -1,6 +1,6 @@
-import { format, isToday, differenceInSeconds, differenceInMinutes } from 'date-fns'
+import { format, isToday, differenceInSeconds } from 'date-fns'
 
-export function formatTime(date: Date|string) {
+export function formatTime(date: Date|string): string {
   if (!date) {
     return ' '
   }

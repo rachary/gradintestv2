@@ -38,7 +38,7 @@ const markAsReadMessage = (user1: string, user2: string) => {
       <div class="border-b w-full border-gray-300 space-y-1 py-3 pr-4">
         <div class="text-base flex justify-between items-center">
           <p class="font-semibold text-primary-3 dark:text-secondary-1" >{{ (formatName(props.user.email)) }}</p>
-          <p class="text-xs text-black dark:text-secondary-1">{{ formatTime(getLatestMessage(props.user.id, currentUser?.id || '')?.created_at) }}</p>
+          <p class="text-xs text-black dark:text-secondary-1">{{ formatTime(getLatestMessage(props.user.id, currentUser?.id || '')?.created_at || '') }}</p>
         </div>
         <div class="flex justify-between items-left gap-2 text-base h-full py-1">
           <div class="w-full text-black dark:text-secondary-1">

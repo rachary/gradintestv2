@@ -35,7 +35,7 @@ const highlightText = (text: string): string => {
 </script>
 
 <template>
-  <div class="h-full bg-secondary-1 dark:bg-primary-3 py-2">
+  <div class="h-full bg-secondary-1 dark:bg-primary-3 duration-200 py-2">
     <div class="pb-4 flex items-center gap-4 px-4">
       <button class="py-2" title="close search message" @click="emitToggle()">
         <icon icon="mdi:window-close" class="text-2xl dark:text-secondary-1"></icon>

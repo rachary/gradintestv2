@@ -19,7 +19,7 @@ const emitToggle = () => {
 </script>
 
 <template>
-  <div  class="bg-primary-1 dark:bg-primary-2 h-full flex justify-between items-center pl-3 pr-5 py-2 relative">
+  <div  class="bg-primary-1 dark:bg-primary-2 duration-200 h-full flex justify-between items-center pl-3 pr-5 py-2 relative">
     <div class="flex items-center gap-4">
       <img :src="props.user?.avatar" class="w-12 rounded-full" alt="">
       <p class="text-secondary-1 capitalize">{{ formatName(props.user?.email || '') }}</p>

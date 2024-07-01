@@ -42,10 +42,28 @@ const toggleDark = useToggle(isDark)
   <div class="border-l border-gray-300 h-full xl:pr-1 select-none w-full flex flex-col justify-between">
     <div class="w-full py-3 px-4 flex justify-between items-center">
       <p class="text-2xl font-extrabold text-primary-3 dark:text-secondary-1">Chats</p>
-
       <div class="flex items-center gap-4">
         <div>
-          <button class="bg-primary-1 px-4 dark:bg-primary-3" @click="toggleDark()">Dark</button>
+          <button class="px-1 rounded-full flex items-center gap-3 bg-blue-400 dark:bg-blue-950" @click="toggleDark()">
+            <div class="relative rounded-full p-[1px] shadow-md">
+              <div class="text-secondary-1 opacity-100 dark:opacity-0 duration-200">
+                <icon icon="mdi:cloud" class="absolute text-2xl bottom-1/2 translate-y-1/2 right-1/2 translate-x-1/2"></icon>
+              </div>
+              <div class="opacity-0 dark:opacity-100 rounded-full translate-x-full dark:translate-x-0 duration-200">
+                <icon icon="emojione:full-moon" class="text-2xl"></icon>
+              </div>
+            </div>
+            <div class="relative rounded-full p-[1px] shadow-md">
+              <div class="text-secondary-1 opacity-0 dark:opacity-100 duration-200">
+                <icon icon="mdi:star" class="absolute text-xs bottom-1/2 right-1/2"></icon>
+                <icon icon="mdi:star" class="absolute text-xs bottom-3 right-1"></icon>
+                <icon icon="mdi:star" class="absolute text-xs bottom-1 right-3"></icon>
+              </div>
+              <div class="dark:opacity-0 rounded-full dark:-translate-x-full translate-x-0 duration-200">
+                <icon icon="emojione:sun" class="text-3xl"></icon>
+              </div>
+            </div>
+          </button>
         </div>
         <div class="relative flex items-center">
           <button title="Menu" class="p-1 rounded-full duration-300" :class="{ 'bg-primary-2 dark:bg-secondary-1': toggleMenu}" @click="toggleMenu = !toggleMenu">
