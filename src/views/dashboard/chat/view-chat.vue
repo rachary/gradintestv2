@@ -13,12 +13,17 @@ const route = useRoute()
 const userStore = useUserStore()
 const authStore = useAuthStore()
 const messageStore = useMessageStore()
-messageStore.getConversations()
+
+messageStore.getMessagesFromLocalStorage()
+
 const currentUser = authStore.getUserAuthentication || undefined
+
 const user = computed(() => userStore.getUserById(String(route.params.id)))
 
-const conversationContainer = ref<HTMLDivElement | null>(null)
+const messageContainer = ref<HTMLDivElement | null>(null)
+
 const inputMessage = ref('')
+
 const searchMessage = ref(false)
 
 const searchToggle = () => {
@@ -26,17 +31,17 @@ const searchToggle = () => {
 }
 
 const submit = () => {
-  messageStore.findConversationsById(inputMessage.value, String(route.params.id), currentUser?.id || '')
+  messageStore.sendMessage(currentUser?.id || '', String(route.params.id), inputMessage.value)
   inputMessage.value = ''
 
   nextTick(() => {
-    if (conversationContainer.value) {
-      conversationContainer.value.scrollTop = conversationContainer.value.scrollHeight
+    if (messageContainer.value) {
+      messageContainer.value.scrollTop = messageContainer.value.scrollHeight
     }
   })
 }
-
 </script>
+
 <template>
   <div class="flex h-full">
     <div class="bg-yellow-50 w-full relative flex flex-col justify-between">
@@ -46,8 +51,8 @@ const submit = () => {
 
         <component-chat-header :user="user" @search-toggle="searchToggle"></component-chat-header>
       </div>
-      <div ref="conversationContainer" class="h-full overflow-y-auto relative">
-        <component-chat-conversation :user="user" :conversations="messageStore.conversations"></component-chat-conversation>
+      <div ref="conversationContainer" class="message-container h-full overflow-y-auto relative">
+        <component-chat-conversation :user="user" :messages="messageStore.messages"></component-chat-conversation>
       </div>
       <form class="h-auto bg-primary-1 px-2 flex items-center relative z-10 py-1" @submit.prevent="submit">
         <input ref="input" v-model="inputMessage" v-focus type="text" placeholder="Type a message..." class="w-full py-2 px-2 rounded-md" required>

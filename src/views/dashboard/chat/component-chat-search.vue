@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { formatName } from '@/formatters/name';
 import { formatTime } from '@/formatters/date';
 import { useMessageStore } from '@/stores/message';
@@ -18,22 +18,19 @@ const emitToggle = () => {
   emit('searchToggle')
 }
 const messageStore = useMessageStore()
+
 const searchMessage = ref('')
+
 const filteredMessage = computed(() => {
-  return messageStore.getFilterMessage(props.user?.id || '', props.currentUser?.id || '').map(conversation => 
-  ({
-    ...conversation,
-    messages: conversation.messages.filter(msg =>
-      msg.message.toLowerCase().includes(searchMessage.value.toLowerCase())
-    )
-  }))
+  return messageStore.getMessagesById(props.user?.id || '', props.currentUser?.id || '')
+
 })
 
 const highlightText = (text: string): string => {
   return text.replace(searchMessage.value, `<span class="font-bold text-primary-1">${searchMessage.value}</span>`)
 }
-
 </script>
+
 <template>
   <div class="h-full bg-secondary-1 py-2">
     <div class="pb-4 flex items-center gap-4 px-4">
@@ -56,14 +53,12 @@ const highlightText = (text: string): string => {
     </div>
     <div class="h-full overflow-y-auto">
       <div v-if="searchMessage">
-        <div v-for="(conversation, index) in filteredMessage" :key="index">
-            <div  v-for="chat in conversation.messages"  :key="chat.id">
-              <div class="p-4 border-b ">
-                <p class="text-xs">{{ formatTime(chat.created_at) }}</p>
-                <p v-html="highlightText(chat.message)"></p>
-              </div>
-            </div>
+        <div v-for="chat in filteredMessage"  :key="chat.user_id">
+          <div class="p-4 border-b ">
+            <p class="text-xs">{{ formatTime(chat.created_at) }}</p>
+            <p v-html="highlightText(chat.message)"></p>
           </div>
+        </div>
       </div>
       <div v-else class="text-center my-20">
         <p class="text-slate-400">Search message within <span class="font-semibold text-primary-1">{{ formatName(props.user?.email || '') }}</span></p>
@@ -71,6 +66,5 @@ const highlightText = (text: string): string => {
     </div>
   </div>
 </template>
-<style lang="postcss" scoped>
-  
-</style>
+
+<style lang="postcss" scoped></style>

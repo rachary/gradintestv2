@@ -1,10 +1,25 @@
 <script setup lang="ts">
-import ComponentAuth from './component-auth.vue';
-import { useUserStore } from '@/stores/user';
+import { useAuthStore } from '@/stores/auth'
+import ComponentAuth from './component-auth.vue'
+import { useUserStore } from '@/stores/user'
 import { VueWriter } from 'vue-writer'
+import { useRouter } from 'vue-router'
+import { computed, watch } from 'vue'
 
+const router = useRouter()
 const userStore = useUserStore()
+const authStore = useAuthStore()
+
 userStore.initializedUsers()
+authStore.initializedAuthentication()
+
+const auth = computed(() => authStore.getAuthentication)
+
+watch(auth, () => {
+  if (auth.value) {
+    router.push({ name: 'home'})
+  }
+})
 </script>
 
 <template>
@@ -27,5 +42,6 @@ userStore.initializedUsers()
     </div>
   </main>
 </template>
+
 <style lang="postcss" scoped>
 </style>

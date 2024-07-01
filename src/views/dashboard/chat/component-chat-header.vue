@@ -6,7 +6,9 @@ import { formatName } from '@/formatters/name';
 const props = defineProps<{ 
   user: User | undefined
 }>()
+
 const closeToggle = ref(false)
+
 const emit = defineEmits<{
   (e: 'searchToggle'): void
 }>()
@@ -15,6 +17,7 @@ const emitToggle = () => {
   emit('searchToggle')
 }
 </script>
+
 <template>
   <div  class="bg-primary-1 h-full flex justify-between items-center pl-3 pr-5 py-2 relative">
     <div class="flex items-center gap-4">
@@ -42,6 +45,7 @@ const emitToggle = () => {
     </div>
   </div>
 </template>
+
 <style lang="postcss" scoped>
 .popup-enter-active,
 .popup-leave-active {

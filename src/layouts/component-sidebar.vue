@@ -8,15 +8,16 @@ import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 
-
 const authStore = useAuthStore()
 const router = useRouter()
 const userStore = useUserStore()
 
-userStore.initializedUsers()
-authStore.initializedAuthentication()
 const currentUser = computed(() => authStore.getUserAuthentication || undefined)
+
 const users = computed(() => userStore.getUserList)
+
+const isTouchDevice = ref(false)
+
 const logout = () => {
   authStore.logout()
   router.push({ name: 'login'})
@@ -27,27 +28,31 @@ const toggleState = ref<ToggleSidebar>({
   chat: true,
   setting: false
 })
+
 const hoverState = ref<ToggleSidebar>({
   profile: false,
   chat: false,
   setting: false
 })
 
-const isTouchDevice = ref(false)
+
 onMounted(() => {
   isTouchDevice.value = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 })
+
 const toggle = (state: ToggleKeySidebar) => {
   for (const s in toggleState.value) {
     toggleState.value[s as ToggleKeySidebar] = false
   }
   toggleState.value[state] = true
 } 
+
 const handleMouse = (state: ToggleKeySidebar) => {
   if(!isTouchDevice.value) {
     hoverState.value[state] = true
   }
 }
+
 const handleTouch = (state: ToggleKeySidebar) => {
   isTouchDevice.value = true
   hoverState.value[state] = false

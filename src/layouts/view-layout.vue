@@ -1,20 +1,42 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router'
 import ComponentSidebar from './component-sidebar.vue'
-import { computed, watch } from 'vue';
-// import { useMessageStore } from '@/stores/message';
-// const messageStore = useMessageStore()
-// messageStore.generateRandomMessage()
+import { computed, watch } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useMessageStore } from '@/stores/message'
+import { useUserStore } from '@/stores/user'
+
 const route = useRoute()
+const authStore = useAuthStore()
+const userStore = useUserStore()
+const messageStore = useMessageStore()
+
+const router = useRouter()
+
+messageStore.getMessagesFromLocalStorage()
+messageStore.generateRandomMessages()
+userStore.initializedUsers()
+authStore.initializedAuthentication()
+
+const auth = computed(() => authStore.getAuthentication)
+
 const isMobile = computed(() => {
   return window.innerWidth < 1280
 })
+
 const routeChat = computed(() => {
   return route.name === 'chat'
 })
+
 watch(route, () => {
   if (isMobile.value && route.name === 'chat') {
     document.querySelector('div')?.scrollIntoView({ behavior: 'smooth'})
+  }
+})
+
+watch(auth, () => {
+  if (!auth.value) {
+    router.push({ name: 'login'})
   }
 })
 </script>
@@ -33,5 +55,6 @@ watch(route, () => {
     </div>
   </div>
 </template>
+
 <style lang="postcss" scoped>
 </style>

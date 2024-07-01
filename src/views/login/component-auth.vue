@@ -5,12 +5,15 @@ import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
+const authStore = useAuthStore()
+
 const account = reactive({
   username: '',
   password: ''
 })
-const authStore = useAuthStore()
+
 const passwordVisible = ref(false)
+
 const submit = () => {
   authStore.login(account.username)
   router.push({ name: 'home'})
@@ -51,8 +54,8 @@ const submit = () => {
     <div class="text-center" type="submit">
       <button class=" text-primary-1 rounded-md hover:shadow-md hover:bg-primary-1 transition hover:card hover:text-secondary-1 tracking-wider font-semibold py-2 px-4 w-fit">Login</button>
     </div>
-
   </form>
 </template>
+
 <style lang="postcss" scoped>
 </style>
