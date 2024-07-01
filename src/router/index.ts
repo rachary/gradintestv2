@@ -1,4 +1,3 @@
-import { useAuthStore } from '@/stores/auth';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -8,9 +7,6 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/layouts/view-layout.vue'),
-      meta: {
-        requiresAuth: true
-      },
       children: [
         {
           path: '',
@@ -31,22 +27,6 @@ const router = createRouter({
       component: () => import('@/views/login/view-login.vue')
     }
   ]
-})
-
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  const isAuthenticated = authStore.getAuthentication
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
-      next({ name: 'login' });
-    } else {
-      next()
-    }
-  } else if (to.name === 'login' && isAuthenticated) {
-    next({ name: 'home' })
-  } else {
-    next()
-  }
 })
 
 export default router

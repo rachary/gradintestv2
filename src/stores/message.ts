@@ -5,116 +5,104 @@ import { faker } from "@faker-js/faker";
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
-    conversations: [] as Conversation[],
-    latestMessage: null as Message | null,
-    greetings: [
-      "hello"
-    , "ciao"
-    , "welcome"
-    , "howdy"
-    , "greetings"
-    , "salut"
-    , "hallo"
-    , "hola"
-    , "Gday"
-    , "Hey"
-    ]
+    messages: [] as Messages[],
   }),
   getters: {
+    countUnreadMessage: (state) => (receiver_id: string) => {
+      const authStore = useAuthStore()
+      const currentUser = authStore.getUserAuthentication
+      if (!currentUser?.id) {
+        return 0
+      }
+      return state.messages.filter(msg => 
+        msg.receiver_id === currentUser.id &&
+        msg.user_id === receiver_id &&
+        !msg.read_at
+      ).length
+    },
 
+    getLatestMessages: (state) => (user1: string, user2: string): Messages | undefined => {
+      const messages = state.messages.filter(msg => 
+        (msg.user_id === user1 && msg.receiver_id === user2) ||
+        (msg.user_id === user2 && msg.receiver_id === user1)
+      )
+      return messages.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0]
+    }
   },
   actions: {
-    getConversations() {
-      const dataConversations = localStorage.getItem('conversations')
-      if (dataConversations) {
-        this.conversations = JSON.parse(dataConversations)
+    getMessagesFromLocalStorage() {
+      const dataMessages = localStorage.getItem('messages')
+      if (dataMessages) {
+        this.messages = JSON.parse(dataMessages)
         }
     },
-    getFilterMessage(user1: string, user2: string) {
-      const filterMessage = this.conversations.filter(conversation => 
-        conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)
-      )
-      return filterMessage
-    },
-    generateRandomMessage() {
-      const userStore = useUserStore()
-      const authStore = useAuthStore()
-      const users = userStore.users
-      const currentUser = authStore.getUserAuthentication
-      const randomNumber = Math.floor(Math.random() * 10)
-      const generated = users.forEach(user => {
-          this.findConversationsById(faker.word.preposition(100), currentUser?.id || '', user.id)
-        })
-      for (let i = 0; i < randomNumber; i++) {
-        generated
+
+    sendMessage(user_id: string, receiver_id: string, message: string) {
+      const newMessage: Messages = {
+        user_id,
+        receiver_id,
+        message,
+        created_at: new Date().toString(),
+        read_at: null
       }
+      this.messages.push(newMessage)
+      this.saveMessageToLocalStorage()
     },
-    findConversationsById(messageInput: string, user1: string, user2: string) {
-      const findConversationById = this.conversations.find(conversation => 
-        conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)
-      )
-      if (findConversationById) {
-        this.addConversation(messageInput, user1, user2)
-        } else {
-          this.addConversation(messageInput, user1, user2)
+
+    generateRandomMessages() {
+      const authStore = useAuthStore();
+      const userStore = useUserStore();
+      const messages = [
+        'Hello!',
+        'How are you?',
+        'Good morning!',
+        'Good night!',
+        'What are you doing?',
+        'Have a great day!',
+        'See you soon!',
+        'Take care!',
+        'Thank you!',
+        'You’re welcome!',
+      ]
+
+      userStore.getUserList.forEach(user => {
+        if (user.id !== authStore.getUserAuthentication?.id) {
+          const randomNumber = Math.floor(Math.random() * 5) + 1
+          
+          const randomMessage = Array(randomNumber).fill(null).map(() => ({
+            message: messages[Math.floor(Math.random() * messages.length)],
+            created_at: faker.date.recent().toString()
+          }))
+          randomMessage.forEach(({message, created_at}) => {
+            const randomMessages: Messages = {
+              user_id: authStore.getUserAuthentication?.id || '',
+              receiver_id:  user.id,
+              message,
+              created_at: created_at,
+              read_at: null
+            }
+            this.messages.push(randomMessages)
+          })
         }
-      localStorage.setItem('conversations', JSON.stringify(this.conversations))
-    },
-    addConversation(messageInput: string, user1: string, user2: string) {
-      this.conversations.push({
-        user_ids: [user1, user2],
-        messages: this.newMessage(messageInput, user2)
       })
+      this.saveMessageToLocalStorage()
     },
-    newMessage(messageInput: string, user: string) {
-      const recentDate = new Date().toString()
-      const message = []
-      message.push({
-        user_id: user,
-        message: messageInput,
-        created_at: recentDate,
-        read_at: null,
-      })
-      return message
-    },
-    getLatestMessage(user1: string, user2: string) {
-      let latestMessage: Message | null = null
-      this.conversations.forEach(conversation => {
-        if (conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)) {
-          const sortedMessages = conversation.messages.slice().sort((a, b) => 
-          b.created_at.getTime() - a.created_at.getTime())
-          if (sortedMessages.length > 0) {
-            latestMessage = sortedMessages[0]
+
+    markAsReadMessage(sender_id: string, receiver_id: string) {
+      const authStore = useAuthStore()
+      const currentUser = authStore.getUserAuthentication
+      if (currentUser?.id === receiver_id) {
+        this.messages.map(msg => {
+          if (msg.user_id === sender_id && msg.receiver_id === receiver_id && !msg.read_at) {
+            msg.read_at = new Date().toString()
           }
-        }
-      })
-      return latestMessage
+        })
+      }
+      this.saveMessageToLocalStorage()
     },
-    markMessagesAsRead(user1: string, user2: string) {
-      const recentDate = new Date().toString();
-      this.conversations.forEach(conversation => {
-        if (conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)) {
-          conversation.messages.forEach(message => {
-            if (message.user_id !== user2 && message.read_at == null) {
-              message.read_at = recentDate
-            }
-          });
-        }
-      });
-      localStorage.setItem('conversations', JSON.stringify(this.conversations))
+
+    saveMessageToLocalStorage() {
+      localStorage.setItem('messages', JSON.stringify(this.messages))
     },
-    countUnreadMessages(user1: string, user2: string) {
-      let unreadCount = 0;
-      this.conversations.forEach(conversation => {
-        if (conversation.user_ids.includes(user1) && conversation.user_ids.includes(user2)) {
-          conversation.messages.forEach(message => {
-            if (message.user_id !== user2 && message.read_at == null) {
-              unreadCount++
-            }
-          });
-        }
-      });
-      return unreadCount
-    }
   }
 })

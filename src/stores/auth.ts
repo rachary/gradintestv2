@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', {
     getAuthentication: (state) => {
       return state.authentication?.is_authenticated
     },
+
     getUserAuthentication: (state) => {
       return state.authentication?.user
     },
@@ -18,13 +19,15 @@ export const useAuthStore = defineStore('auth', {
       const storedAuth = localStorage.getItem('authentication')
       if (storedAuth) {
         this.authentication = JSON.parse(storedAuth)
+      } else {
+        localStorage.setItem('authentication', JSON.stringify({ is_authenticated: false, user: null }))
       }
-      console.log(this.authentication)
     },
+
     login(userEmail: string) {
       const userStore = useUserStore()
       const user = userStore.getUserByEmail(userEmail)
-      let currentUser = this.getUserAuthentication
+      let currentUser = null
       if (user) {
         currentUser = {
           id: user.id,
@@ -34,10 +37,11 @@ export const useAuthStore = defineStore('auth', {
       } else {
         currentUser = userStore.addUser(userEmail)
       }
-      localStorage.setItem('authentication', JSON.stringify({ isAuthenticated: this.getAuthentication, user: currentUser }))
+      localStorage.setItem('authentication', JSON.stringify({ is_authenticated: true, user: currentUser }))
     },
+
     logout() {
-      localStorage.setItem('authentication', JSON.stringify({ isAuthenticated: this.getAuthentication, user: null }))
+      localStorage.setItem('authentication', JSON.stringify({ is_authenticated: false, user: null }))
     },
   }
 })

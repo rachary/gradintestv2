@@ -13,47 +13,53 @@ export const useUserStore = defineStore('user', {
     getUserList: (state) => {
       const authStore = useAuthStore()
       const messageStore = useMessageStore()
-      messageStore.getConversations()
-      const auth = authStore.getUserAuthentication
-      return state.users
-      .filter(user => user.id !== auth?.id)
-      .map(user => {
-        const latestMessage = messageStore.getLatestMessage(user.id, auth?.id || '')?.created_at
-        return {
-          ...user,
-          recentMessage: latestMessage ? latestMessage : null,
-        }
-      })
-      .sort((a, b) => {
-        if (a.recentMessage && b.recentMessage) {
-          return new Date(b.recentMessage).getTime() - new Date(a.recentMessage).getTime()
-        } else if (a.recentMessage) {
-          return -1
-        } else if (b.recentMessage) {
+      const currentUser = authStore.getUserAuthentication
+      if (!currentUser) {
+        return []
+      }
+      const latestMessages = state.users
+        .filter(user => user.id !== currentUser?.id)
+        .map(user => {
+          const latestMessage = messageStore.messages
+            .filter(msg => (msg.user_id === currentUser.id && msg.receiver_id === user.id) ||
+                          (msg.user_id === user.id && msg.receiver_id === currentUser.id))
+            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0]
+          return {
+            user, latestMessage
+          }  
+        })
+
+      return latestMessages.sort((a, b) => {
+        if (!a.latestMessage) {
           return 1
-        } else {
-          return 0
         }
-      })
+        if (!b.latestMessage) {
+          return -1
+        }
+        return new Date(b.latestMessage.created_at).getTime() - new Date(a.latestMessage.created_at).getTime()
+      }).map(item => item.user)
     },
   },
   actions: {
     initializedUsers() {
       const storedUsers = localStorage.getItem('users')
-      if (storedUsers) {
-        this.users = JSON.parse(storedUsers)
-      } else {
+      if (!storedUsers) {
         this.generatedUsers()
+      } else {
+        this.users = JSON.parse(storedUsers)
       }
     },
+
     getUserById(userId: string) {
       const user = this.users.find(user => user.id === userId)
       return user
     },
+
     getUserByEmail(userEmail: string) {
       const user = this.users.find(user => user.email === userEmail)
       return user
     },
+
     addUser(userEmail: string) {
       const user: User = {
         id: uuidv4(),
@@ -64,6 +70,7 @@ export const useUserStore = defineStore('user', {
       localStorage.setItem('users', JSON.stringify(this.users))
       return user
     }, 
+
     generatedUsers() {
       for (let i = 0; i < 20; i++) {
         this.users.push({
@@ -74,6 +81,5 @@ export const useUserStore = defineStore('user', {
       }
       localStorage.setItem('users', JSON.stringify(this.users))
     },
-
   }
 })
