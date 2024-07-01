@@ -22,8 +22,10 @@ const messageStore = useMessageStore()
 const searchMessage = ref('')
 
 const filteredMessage = computed(() => {
-  return messageStore.getMessagesById(props.user?.id || '', props.currentUser?.id || '')
-
+  const messages = messageStore.getMessagesById(props.user?.id || '', props.currentUser?.id || '')
+  return messages
+    .filter(msg => msg.message.toLowerCase().includes(searchMessage.value.toLowerCase()))
+    .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 })
 
 const highlightText = (text: string): string => {
