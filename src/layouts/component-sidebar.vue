@@ -60,11 +60,11 @@ const handleTouch = (state: ToggleKeySidebar) => {
 </script>
 
 <template>
-  <div class="w-full h-full flex bg-white">
-    <div class="hidden md:flex p-4 bg-primary-1 flex-col items-center justify-between">
+  <div class="w-full h-full flex bg-secondary-1 dark:bg-primary-3 duration-200 ease-in-out">
+    <div class="hidden md:flex p-4 bg-primary-1 dark:bg-primary-3 duration-200 ease-in-out flex-col items-center justify-between">
       <div class="flex items-center">
         <button class="relative p-2 rounded-full" :class="{ 'active': toggleState.chat }" @mouseover="handleMouse('chat')" @mouseleave="hoverState.chat = false" @touchstart="handleTouch('chat')" @click="toggle('chat')">
-          <icon icon="mdi:message-text-outline" class="text-2xl text-primary-3"></icon>
+          <icon icon="mdi:message-text-outline" class="text-2xl text-primary-3 dark:text-secondary-1" :class="{ '!text-primary-3': toggleState.chat }"></icon>
         </button>
         <transition name="popup">
           <p v-if="hoverState.chat" class="title-hover">Chats</p>
@@ -73,7 +73,7 @@ const handleTouch = (state: ToggleKeySidebar) => {
       <div class="space-y-4">
         <div class="flex items-center">
           <button class="relative p-1 rounded-full" :class="{ 'active': toggleState.setting }" @mouseover="handleMouse('setting')" @mouseleave="hoverState.setting = false" @touchstart="handleTouch('setting')" @click="toggle('setting')">
-            <icon icon="mdi:settings-outline" class="text-3xl text-primary-3"></icon>
+            <icon icon="mdi:settings-outline" class="text-3xl text-primary-3 dark:text-secondary-1" :class="{ '!text-primary-3': toggleState.setting }"></icon>
           </button>
           <transition name="popup">
             <p v-if="hoverState.setting" class="title-hover">Settings</p>
@@ -103,10 +103,10 @@ const handleTouch = (state: ToggleKeySidebar) => {
 </template>
 <style lang="postcss" scoped>
 .active {
-  @apply bg-white transition;
+  @apply bg-secondary-1 transition;
 }
 .title-hover {
-  @apply delay-150 absolute ml-1 translate-x-2/3 scale-100 bg-primary-2 rounded-full text-secondary-1 py-1 px-3
+  @apply delay-150 absolute ml-1 translate-x-2/3 scale-100 bg-primary-2 dark:bg-secondary-1 rounded-full text-secondary-1 dark:text-primary-3 py-1 px-3
 }
 .popup-enter-active,
 .popup-leave-active {

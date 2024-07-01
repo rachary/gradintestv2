@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  linkActiveClass: 'bg-gray-200',
+  linkActiveClass: 'bg-slate-200 dark:bg-primary-2',
   routes: [
     {
       path: '/',

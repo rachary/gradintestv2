@@ -16,10 +16,12 @@ authStore.initializedAuthentication()
 const auth = computed(() => authStore.getAuthentication)
 
 const checkAuth = () => {
-  if (!auth.value) {
-    router.push({ name: 'login'})
+  if (auth.value) {
+    router.push({ name: 'home'})
   }
 }
+
+checkAuth()
 
 watch(auth, () => checkAuth)
 </script>

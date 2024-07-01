@@ -6,28 +6,28 @@ export default {
       mounted(el: HTMLElement) {
         const focusElement = () => {
           if (el instanceof HTMLDivElement) {
-            const component = el.querySelector('input, textarea');
+            const component = el.querySelector('input, textarea')
             if (component instanceof HTMLInputElement || component instanceof HTMLTextAreaElement) {
-              component.focus();
+              component.focus()
             }
           } else {
-            el.focus();
+            el.focus()
           }
-        };
-        focusElement();
+        }
+        focusElement()
       },
       updated(el: HTMLElement, binding: DirectiveBinding) {
         if (binding.value && !binding.oldValue) {
           if (el instanceof HTMLDivElement) {
-            const component = el.querySelector('input, textarea');
+            const component = el.querySelector('input, textarea')
             if (component instanceof HTMLInputElement || component instanceof HTMLTextAreaElement) {
-              component.focus();
+              component.focus()
             }
           } else {
             el.focus();
           }
         }
       }
-		});
+		})
 	},
-};
+}

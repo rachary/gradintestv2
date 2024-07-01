@@ -31,24 +31,24 @@ const markAsReadMessage = (user1: string, user2: string) => {
 
 <template>
   <div>
-    <router-link :to="{ name: 'chat', params: { id: props.user.id}}" class="flex items-center hover:bg-gray-200" @click="markAsReadMessage(props.user.id, currentUser?.id || '')">
+    <router-link :to="{ name: 'chat', params: { id: props.user.id}}" class="flex items-center hover:bg-slate-200 dark:hover:bg-primary-2" @click="markAsReadMessage(props.user.id, currentUser?.id || '')">
       <div class="min-w-8 xl:min-w-[4.5rem] ml-2 xl:ml-4 mr-2">
         <img :src="props.user.avatar" alt="" class="rounded-full w-12 xl:w-14">
       </div>
       <div class="border-b w-full border-gray-300 space-y-1 py-3 pr-4">
         <div class="text-base flex justify-between items-center">
-          <p class="font-semibold text-primary-3" >{{ (formatName(props.user.email)) }}</p>
-          <p class="text-xs">{{ formatTime(getLatestMessage(props.user.id, currentUser?.id || '')?.created_at) }}</p>
+          <p class="font-semibold text-primary-3 dark:text-secondary-1" >{{ (formatName(props.user.email)) }}</p>
+          <p class="text-xs text-black dark:text-secondary-1">{{ formatTime(getLatestMessage(props.user.id, currentUser?.id || '')?.created_at) }}</p>
         </div>
         <div class="flex justify-between items-left gap-2 text-base h-full py-1">
-          <div class="w-full">
+          <div class="w-full text-black dark:text-secondary-1">
             <p v-if="getLatestMessage(props.user.id, currentUser?.id || '')" class="line-clamp-1">
               {{ getLatestMessage(props.user.id, currentUser?.id || '')?.message }}
             </p>
             <p v-else class="italic">Start chatting now!</p>
           </div>
-          <p class=" text-xs text-center min-w-10 " :class="{'bg-transparent': messageStore.countUnreadMessage(props.user.id)}">
-            <span v-if="messageStore.countUnreadMessage(props.user.id)" class="rounded-full px-2 py-1 w-fit bg-primary-1 text-secondary-1">{{ messageStore.countUnreadMessage(props.user.id) }}</span>
+          <p class=" text-xs text-right min-w-10" :class="{'bg-transparent': messageStore.countUnreadMessage(props.user.id)}">
+            <span v-if="messageStore.countUnreadMessage(props.user.id)" class="rounded-full px-2 py-1 w-fit bg-primary-1 text-secondary-1 dark:bg-secondary-1 dark:text-primary-3">{{ messageStore.countUnreadMessage(props.user.id) }}</span>
           </p>
         </div>
       </div>

@@ -19,7 +19,7 @@ const emitToggle = () => {
 </script>
 
 <template>
-  <div  class="bg-primary-1 h-full flex justify-between items-center pl-3 pr-5 py-2 relative">
+  <div  class="bg-primary-1 dark:bg-primary-2 h-full flex justify-between items-center pl-3 pr-5 py-2 relative">
     <div class="flex items-center gap-4">
       <img :src="props.user?.avatar" class="w-12 rounded-full" alt="">
       <p class="text-secondary-1 capitalize">{{ formatName(props.user?.email || '') }}</p>
@@ -32,7 +32,7 @@ const emitToggle = () => {
       </div>
       <div class="relative">
         <button title="close conversation" class="p-1 rounded-full duration-300" :class="{ 'bg-secondary-1': closeToggle}" @click="closeToggle = !closeToggle">
-          <icon icon="mdi:dots-vertical" class="text-secondary-1 text-3xl" :class="{ '!text-primary-1': closeToggle}"></icon>
+          <icon icon="mdi:dots-vertical" class="text-secondary-1 text-3xl" :class="{ '!text-primary-1 dark:!text-primary-3': closeToggle}"></icon>
         </button>
         <transition name="popup">
           <div v-if="closeToggle" class="absolute z-10 right-0 shadow-md rounded-sm bg-secondary-1 py-1" @click="closeToggle = !closeToggle">

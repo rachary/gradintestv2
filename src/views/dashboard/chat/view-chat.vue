@@ -20,8 +20,6 @@ const currentUser = authStore.getUserAuthentication || undefined
 
 const user = computed(() => userStore.getUserById(String(route.params.id)))
 
-const messageContainer = ref<HTMLDivElement | null>(null)
-
 const inputMessage = ref('')
 
 const searchMessage = ref(false)
@@ -47,7 +45,7 @@ const submit = () => {
 <template>
   <div class="flex h-full">
     <div class="bg-yellow-50 w-full relative flex flex-col justify-between">
-      <img src="/images/background-chat.jpg" class=" w-full absolute h-full object-cover opacity-30 z-0" alt="">
+      <img src="/images/background-chat.jpg" class=" w-full absolute h-full object-cover opacity-30 dark:opacity-90 duration-200 z-0" alt="">
       <p class="absolute opacity-30 text-4xl text-primary-3 font-semibold w-full h-full flex items-center justify-center">gradintest</p>
       <div class="h-auto relative z-20">
 
@@ -56,7 +54,7 @@ const submit = () => {
       <div ref="conversationContainer" class="message-container h-full overflow-y-auto relative">
         <component-chat-conversation :user="user" :messages="messageStore.messages"></component-chat-conversation>
       </div>
-      <form class="h-auto bg-primary-1 px-2 flex items-center relative z-10 py-1" @submit.prevent="submit">
+      <form class="h-auto bg-primary-1 dark:bg-primary-2 px-2 flex items-center relative z-10 py-1" @submit.prevent="submit">
         <input ref="input" v-model="inputMessage" v-focus type="text" placeholder="Type a message..." class="w-full py-2 px-2 rounded-md" required>
         <button type="submit" class="pr-2 pl-4" title="send message">
           <icon icon="mdi:paper-airplane" class="text-2xl text-secondary-1"></icon>
@@ -80,13 +78,5 @@ const submit = () => {
 .slide-left-leave-to {
   @apply translate-x-full
 }
-.slide-left.main-enter-active,
-.slide-left.main-leave-active {
-  @apply transition w-full duration-1000
-}
 
-.slide-left.main-enter-from,
-.slide-left.main-leave-to {
-  @apply w-[calc(100%-720px)]
-}
 </style>
