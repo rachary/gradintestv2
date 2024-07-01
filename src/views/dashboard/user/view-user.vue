@@ -44,23 +44,23 @@ const toggleDark = useToggle(isDark)
       <p class="text-2xl font-extrabold text-primary-3 dark:text-secondary-1">Chats</p>
       <div class="flex items-center gap-4">
         <div>
-          <button class="px-1 rounded-full flex items-center gap-3 bg-blue-400 dark:bg-blue-950" @click="toggleDark()">
+          <button class="px-1 rounded-full flex items-center gap-2 bg-blue-400 dark:bg-blue-950" @click="toggleDark()">
             <div class="relative rounded-full p-[1px] shadow-md">
               <div class="text-secondary-1 opacity-100 dark:opacity-0 duration-200">
-                <icon icon="mdi:cloud" class="absolute text-2xl bottom-1/2 translate-y-1/2 right-1/2 translate-x-1/2"></icon>
+                <icon icon="mdi:cloud" class="absolute text-xl bottom-1/2 translate-y-1/2 right-1/2 translate-x-1/2"></icon>
               </div>
               <div class="opacity-0 dark:opacity-100 rounded-full translate-x-full dark:translate-x-0 duration-200">
-                <icon icon="emojione:full-moon" class="text-2xl"></icon>
+                <icon icon="emojione:full-moon" class="text-xl"></icon>
               </div>
             </div>
             <div class="relative rounded-full p-[1px] shadow-md">
               <div class="text-secondary-1 opacity-0 dark:opacity-100 duration-200">
-                <icon icon="mdi:star" class="absolute text-xs bottom-1/2 right-1/2"></icon>
-                <icon icon="mdi:star" class="absolute text-xs bottom-3 right-1"></icon>
-                <icon icon="mdi:star" class="absolute text-xs bottom-1 right-3"></icon>
+                <icon icon="mdi:star" class="absolute text-[10px] bottom-1/2 right-1/2"></icon>
+                <icon icon="mdi:star" class="absolute text-[6px] bottom-[14px] right-1"></icon>
+                <icon icon="mdi:star" class="absolute text-[8px] bottom-1 right-2"></icon>
               </div>
               <div class="dark:opacity-0 rounded-full dark:-translate-x-full translate-x-0 duration-200">
-                <icon icon="emojione:sun" class="text-3xl"></icon>
+                <icon icon="emojione:sun" class="text-2xl"></icon>
               </div>
             </div>
           </button>
