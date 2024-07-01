@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import ComponentSidebar from './component-sidebar.vue'
-import { computed, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useMessageStore } from '@/stores/message'
 import { useUserStore } from '@/stores/user'
@@ -13,8 +13,10 @@ const messageStore = useMessageStore()
 
 const router = useRouter()
 
+onMounted(() => {
+  messageStore.generateRandomMessages()
+})
 messageStore.getMessagesFromLocalStorage()
-messageStore.generateRandomMessages()
 userStore.initializedUsers()
 authStore.initializedAuthentication()
 

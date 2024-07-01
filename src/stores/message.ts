@@ -29,13 +29,6 @@ export const useMessageStore = defineStore('message', {
       return messages.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0]
     },
 
-    getSortedMessages: (state) => (user1: string, user2: string): Messages | undefined => {
-      const messages = state.messages.filter(msg => 
-        (msg.user_id === user1 && msg.receiver_id === user2) ||
-        (msg.user_id === user2 && msg.receiver_id === user1)
-      )
-      return messages.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    }
   },
   actions: {
     getMessagesFromLocalStorage() {
@@ -83,8 +76,8 @@ export const useMessageStore = defineStore('message', {
           }))
           randomMessage.forEach(({message, created_at}) => {
             const randomMessages: Messages = {
-              user_id: authStore.getUserAuthentication?.id || '',
-              receiver_id:  user.id,
+              user_id: user.id,
+              receiver_id: authStore.getUserAuthentication?.id || '',
               message,
               created_at: created_at,
               read_at: null
