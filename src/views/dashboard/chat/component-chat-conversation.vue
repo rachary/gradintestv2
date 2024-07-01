@@ -32,20 +32,22 @@ const filteredMessages = computed(() => {
 <template>
   <div class="h-full relative">
     <div v-for="(message, index) in filteredMessages" :key="index" class="message-container flex flex-col gap-2 relative z-10 py-4 px-8">
-      <div  v-if="message.user_id === currentUser?.id" class="max-w-screen-xs w-fit bg-secondary-1 p-2 card self-end relative chat-bubble chat-bubble-right">
-        <p class="text-xs font-semibold text-blue-500 capitalize">{{ formatName(currentUser?.email ?? '') }}</p>
-        <div class="flex items-end gap-1 mt-1">
-          <p class="">{{ message.message }}</p>
-          <p class="text-end text-xs translate-y-1">{{ formatTime(message.created_at) }}</p>
+      <transition name="fade-down">
+        <div  v-if="message.user_id === currentUser?.id" class="max-w-screen-xs w-fit bg-secondary-1 p-2 card self-end relative chat-bubble chat-bubble-right">
+          <p class="text-xs font-semibold text-blue-500 capitalize">{{ formatName(currentUser?.email ?? '') }}</p>
+          <div class="flex items-end gap-1 mt-1">
+            <p class="">{{ message.message }}</p>
+            <p class="text-end text-xs translate-y-1">{{ formatTime(message.created_at) }}</p>
+          </div>
         </div>
-      </div>
-      <div v-else class="max-w-screen-xs w-fit bg-secondary-1 p-2 card relative chat-bubble-left">
+        <div v-else class="max-w-screen-xs w-fit bg-secondary-1 p-2 card relative chat-bubble-left">
           <p class="text-xs font-semibold text-red-500">{{ formatName(props.user?.email || '') }}</p>
-        <div class="flex items-end gap-1 mt-1">
-          <p class="">{{ message.message }}</p>
-          <p class="text-end text-xs translate-y-1">{{ formatTime(message.created_at) }}</p>
+          <div class="flex items-end gap-1 mt-1">
+            <p class="">{{ message.message }}</p>
+            <p class="text-end text-xs translate-y-1">{{ formatTime(message.created_at) }}</p>
+          </div>
         </div>
-      </div>
+      </transition>
 
     </div>
   </div>
@@ -66,5 +68,14 @@ const filteredMessages = computed(() => {
     @apply absolute !left-auto right-0 !translate-x-3/4 shadow-md;
     @apply w-5 h-5 bg-secondary-1;
   }
+}
+.fade-down-enter-active,
+.fade-down-leave-active {
+  @apply opacity-50 transition translate-y-0
+}
+
+.fade-down-enter-from,
+.fade-down-leave-to {
+  @apply opacity-0 translate-y-full
 }
 </style>

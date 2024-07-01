@@ -35,8 +35,10 @@ const submit = () => {
   inputMessage.value = ''
 
   nextTick(() => {
-    if (messageContainer.value) {
-      messageContainer.value.scrollTop = messageContainer.value.scrollHeight
+    const messageContainer = document.querySelector('.message-container')
+    if (messageContainer) {
+      messageContainer.scrollIntoView({ behavior: 'smooth'})
+      messageContainer.scrollTo({ top: messageContainer.scrollHeight, behavior: 'smooth' })
     }
   })
 }

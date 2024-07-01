@@ -36,11 +36,12 @@ watch(route, () => {
   }
 })
 
-watch(auth, () => {
-  if (!auth.value) {
-    router.push({ name: 'login'})
+const checkAuth = () => {
+  if (auth.value) {
+    router.push({ name: 'home'})
   }
-})
+}
+watch(auth, () => checkAuth)
 </script>
 
 <template>
