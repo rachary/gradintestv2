@@ -27,6 +27,14 @@ export const useMessageStore = defineStore('message', {
         (msg.user_id === user2 && msg.receiver_id === user1)
       )
       return messages.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0]
+    },
+
+    getSortedMessages: (state) => (user1: string, user2: string): Messages | undefined => {
+      const messages = state.messages.filter(msg => 
+        (msg.user_id === user1 && msg.receiver_id === user2) ||
+        (msg.user_id === user2 && msg.receiver_id === user1)
+      )
+      return messages.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     }
   },
   actions: {
