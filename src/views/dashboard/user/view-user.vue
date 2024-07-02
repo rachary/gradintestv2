@@ -3,12 +3,19 @@ import ComponentUserlist from './component-userlist.vue'
 import { computed, ref } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useDark, useToggle } from '@vueuse/core';
+import { useMessageStore } from '@/stores/message';
+import { useAuthStore } from '@/stores/auth';
+
+const messageStore = useMessageStore()
+const authStore = useAuthStore()
 
 const props = defineProps<{ 
   users: User[],
 }>()
 const searchUser = ref('')
 const toggleMenu = ref(false)
+const isActiveUnread = ref(false)
+
 const emit = defineEmits<{
   (e: 'toggle', state: ToggleKeySidebar): void
   (e: 'logout'): void
@@ -22,9 +29,21 @@ const emitLogout = () => {
   emit('logout')
 }
 
+const currentUser = computed(() => authStore.getUserAuthentication)
+
 const filteredUsers = computed(() => {
-  return props.users.filter((user) => 
-    user.email.toLowerCase().includes(searchUser.value.toLowerCase()))
+  return props.users.filter(user => {
+    const matchEmail = user.email.toLowerCase().includes(searchUser.value.toLowerCase())
+
+    if (isActiveUnread.value) {
+      return matchEmail
+    } else {
+      const messages = messageStore.getMessagesById(currentUser.value?.id || '', user.id)
+      const unreadMessages = messages.some(msg => msg.read_at === null)
+      return matchEmail && unreadMessages
+    }
+  })
+
 })
 
 const isDark = useDark({
@@ -100,8 +119,12 @@ const toggleDark = useToggle(isDark)
         class="bg-primary-1 dark:bg-secondary-1 w-full text-secondary-1 dark:text-primary-3 rounded-r-md placeholder:text-secondary-1 dark:placeholder:text-primary-3 py-2 pr-2 pl-1" 
         placeholder="Search user...">
       </div>
+      <div class="space-x-4 mt-2 font-semibold">
+        <button class="py-2 px-4 rounded-full duration-200 text-primary-3 dark:text-secondary-1" :class="{'bg-primary-1 dark:bg-primary-2 text-secondary-1': isActiveUnread }" @click="isActiveUnread = true">All</button>
+        <button class="py-2 px-4 rounded-full duration-200 text-primary-3 dark:text-secondary-1" :class="{'bg-primary-1 dark:bg-primary-2 text-secondary-1': !isActiveUnread }" @click="isActiveUnread = false">Unread</button>
+      </div>
     </div>
-    <div class="h-full w-full overflow-y-scroll">
+    <div class="h-full w-full overflow-y-scroll duration-200">
       <transition name="switch" mode="out-in">
         <component-userlist v-if="filteredUsers.length !== 0" :users="filteredUsers"></component-userlist>
         <p v-else class="text-center py-8 tracking-wider font-semibold text-primary-3 dark:text-secondary-1">User not found!</p>

@@ -56,11 +56,23 @@ watch(auth, () => checkAuth)
         <component-sidebar></component-sidebar>
       </div>
       <div class="w-full xl:w-2/3 block" :class="{'hidden': isMobile && !routeChat}">
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <transition name="route" mode="out-in">
+            <component :is="Component"></component>
+          </transition>
+        </router-view>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="postcss" scoped>
+.route-enter-from,
+.route-leave-to {
+  @apply opacity-0
+}
+.route-enter-active,
+.route-leave-active {
+  @apply transition-all ease-out
+}
 </style>
