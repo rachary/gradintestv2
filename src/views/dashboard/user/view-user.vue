@@ -14,7 +14,7 @@ const props = defineProps<{
 }>()
 const searchUser = ref('')
 const toggleMenu = ref(false)
-const isActiveUnread = ref(false)
+const isActiveUnread = ref(true)
 
 const emit = defineEmits<{
   (e: 'toggle', state: ToggleKeySidebar): void
