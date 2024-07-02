@@ -40,7 +40,7 @@ watch(auth, () => checkAuth)
           </div>
         </div>
       </div>
-      <div class="w-1/2 h-full bg-secondary-1 items-center justify-center hidden md:flex">
+      <div class="w-1/2 h-full bg-secondary-1 dark:brightness-75 duration-200 items-center justify-center hidden md:flex">
         <img src="/images/laptop.jpg" alt="" class="h-full w-full object-cover">
       </div>
     </div>
