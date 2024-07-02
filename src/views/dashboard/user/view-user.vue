@@ -38,8 +38,9 @@ const filteredUsers = computed(() => {
     if (isActiveUnread.value) {
       return matchEmail
     } else {
-      const messages = messageStore.getMessagesById(currentUser.value?.id || '', user.id)
-      const unreadMessages = messages.some(msg => msg.read_at === null)
+      const messages = messageStore.getMessagesById(user.id, currentUser.value?.id || '')
+      const unreadMessages = messages.some(msg => 
+        msg.receiver_id !== user.id && msg.read_at === null)
       return matchEmail && unreadMessages
     }
   })

@@ -30,7 +30,7 @@ const submit = () => {
         id="username" 
         v-model="account.username"
         v-focus
-        class="border-b text-secondary-1 border-secondary-1 bg-primary-1 dark:bg-primary-3 text-base w-full py-1 focus:bg-transparent focus:text-primary-1 dark:focus:text-primary-3 dark:focus:bg-secondary-1 focus:border-primary-1 dark:focus:border-primary-3" 
+        class="border-b text-secondary-1 border-secondary-1 bg-primary-1 dark:bg-primary-3 text-base w-full py-1 focus:text-primary-1 dark:focus:text-primary-3 focus:bg-secondary-1 dark:focus:bg-secondary-1 focus:border-primary-1 dark:focus:border-primary-3" 
         type="email" 
         required>
       </div>
