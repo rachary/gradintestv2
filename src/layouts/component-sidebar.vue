@@ -89,13 +89,13 @@ const handleTouch = (state: ToggleKeySidebar) => {
         </div>
       </div>
     </div>
-    <div v-if="toggleState.profile">
+    <div v-if="toggleState.profile" class="w-full">
       <view-profile :current-user="currentUser" @toggle="toggle"></view-profile>
     </div>
     <div v-if="toggleState.chat" class="w-full">
       <view-user :users="users" @logout="logout" @toggle="toggle"></view-user>
     </div>
-    <div v-if="toggleState.setting">
+    <div v-if="toggleState.setting" class="w-full">
       <view-setting :current-user="currentUser" @logout="logout" @toggle="toggle"></view-setting>
     </div>
 

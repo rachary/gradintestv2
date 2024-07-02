@@ -21,7 +21,7 @@ const emitLogout = () => {
 </script>
 <template>
   <div class="border-l border-gray-300 h-full w-full select-none">
-    <div class="w-[100vw] xl:w-[34.25rem] py-3 px-4 flex justify-between items-center">
+    <div class="w-full py-3 px-4 flex justify-between items-center">
       <p class="text-2xl font-extrabold text-primary-3 dark:text-secondary-1">Settings</p>
       <button class="md:hidden block text-2xl text-primary-3 p-1 rounded-full mr-2 duration-300 hover:bg-primary-2" @click="emitToggle('chat')">
         <icon icon="carbon:return" ></icon>
