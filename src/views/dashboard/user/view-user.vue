@@ -44,7 +44,6 @@ const filteredUsers = computed(() => {
       return matchEmail && unreadMessages
     }
   })
-
 })
 
 const isDark = useDark({
